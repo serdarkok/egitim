@@ -79,7 +79,16 @@ export default {
     };
   },
   methods: {
-    simulateLogin() {
+    getLogin(data) {
+      console.log(data);
+      this.$store.dispatch('auth/postLogin', data).then(()=> {
+        console.log('Çalıştı action');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    },
+    simulateLogin() { 
        this.$axios.post('/api/auth/', this.model).then((data)=> {
           this.$message.success(data)
         })
@@ -93,7 +102,7 @@ export default {
         return;
       }
       this.loading = true;
-      await this.simulateLogin();
+      await this.getLogin(this.model);
       this.loading = false;
 /*       if (
         this.model.username === this.validCredentials.username &&

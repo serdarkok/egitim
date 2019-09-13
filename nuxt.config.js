@@ -49,6 +49,7 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL : 'http://localhost:3000/api'
   },
   /*
   ** Build configuration
@@ -63,7 +64,9 @@ module.exports = {
   },
 
   serverMiddleware: [
-    { path: '/api', handler: '~/api/auth.js' },
+    // { path: '/api', handler: '~/api/auth.js' },
+    "~/api/auth.js",
+    "~/api/user.js",
   ]
 
 
