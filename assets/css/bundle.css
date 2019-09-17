@@ -1,0 +1,17 @@
+div {
+    border: 0px solid #DFDFDF;
+}
+
+/* Login Box */
+.login-wrap {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); }
+  
+  .login-box {
+    padding: 30px 100px;
+    border: 1px solid #DFDFDF;
+    border-radius: 7px; }
+  

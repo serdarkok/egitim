@@ -1,25 +1,32 @@
 // import axios from '@nuxtjs/axios';
 import Cookie from 'js-cookie';
+import Jwt from 'jsonwebtoken';
 
 const state = {
     user : {
         auth : null,
-    }
+    },
+    error : {
+        status: false,
+        message: null,
+    },
 }
 
 const actions = {
-
     async postLogin({ commit }, data) {
         console.log('Action çalıştı...');
-        // console.log(data);
 
         await this.$axios.post('/postLogin', data)
-        .then((data)=> {
-            commit('CHANGE_AUTH', data);
+        .then((result)=> {
+            console.log(result.data);
+            if (result.data.auth) {
+                commit('CHANGE_AUTH', result);
+                Cookie.set('token', result.data.token);
+            }
+            
             // this.$router.push('/admin');
-            // return data;
-            data ? Cookie.set('auth', data.data):'';
-          })
+            
+        })
         .catch((err) => {
             console.log(err);
           });
@@ -29,8 +36,9 @@ const actions = {
 
 const mutations = {
     CHANGE_AUTH(state, {data}) {
+        console.log(data);
         state.user.auth = data;
-    }
+    },
 }
 
 const getters = { 

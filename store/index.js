@@ -11,13 +11,13 @@ const createStore = () => {
 
         actions : {
             // nuxtServerInit({ commit }, { req }){
-            //     let auth = null
+            //     let token = null
     
             //     if(req.headers.cookie){
             //         const parsedCookie = cookieparser.parse(req.headers.cookie)
     
             //         try {
-            //             auth = JSON.parse(parsedCookie.auth)
+            //             token = JSON.parse(parsedCookie.token)
             //         } catch(err){
     
             //         }

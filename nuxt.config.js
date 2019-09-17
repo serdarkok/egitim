@@ -15,7 +15,6 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap&subset=latin-ext' }
     ]
   },
@@ -27,7 +26,9 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    'bootstrap-scss',
+    'element-ui/lib/theme-chalk/index.css',
+    '@/assets/css/bundle.css'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -47,6 +48,9 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
   ],
+  env: {
+      API_KEY: 'Buradasifre-yer-alacak',
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

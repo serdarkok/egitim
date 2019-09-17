@@ -82,15 +82,14 @@ export default {
     getLogin(data) {
       this.loading = true;
       this.$store.dispatch('auth/postLogin', data).then(()=> {
-        const _auth = this.$store.state.auth.user;
-        if (_auth.auth) {
-          this.$message.success(data)
-          this.$router.push('/admin');
-        }
-        else
-        {
-          this.$message.error("Username or password is invalid");
-        }
+          const _auth = this.$store.state.auth.user;
+          if (_auth.auth) {
+            this.$message.success(data)
+            this.$router.push('/admin');
+          }
+          else {
+            this.$message.error("Username or password is invalid");
+          }
       })
       .catch((err) => {
         console.log(err);
@@ -119,7 +118,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 body {
   background: url("~assets/images/bg-background.png");
   background-size: cover;
