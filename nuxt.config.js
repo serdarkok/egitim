@@ -1,4 +1,6 @@
 
+const bodyParser = require('body-parser');
+
 module.exports = {
   mode: 'universal',
   /*
@@ -13,7 +15,8 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap&subset=latin-ext' }
     ]
   },
   /*
@@ -65,6 +68,8 @@ module.exports = {
 
   serverMiddleware: [
     // { path: '/api', handler: '~/api/auth.js' },
+    bodyParser.json(),
+    "~/api/db.js",
     "~/api/auth.js",
     "~/api/user.js",
   ]

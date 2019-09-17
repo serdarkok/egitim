@@ -7,7 +7,26 @@ const createStore = () => {
         modules: {
             auth: auth,
             user: user
-        } 
+        },
+
+        actions : {
+            // nuxtServerInit({ commit }, { req }){
+            //     let auth = null
+    
+            //     if(req.headers.cookie){
+            //         const parsedCookie = cookieparser.parse(req.headers.cookie)
+    
+            //         try {
+            //             auth = JSON.parse(parsedCookie.auth)
+            //         } catch(err){
+    
+            //         }
+            //     }
+    
+            //     commit('setAuth', auth)
+            // }
+        }
+        
     });
 }
 

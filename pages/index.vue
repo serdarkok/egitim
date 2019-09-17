@@ -80,21 +80,22 @@ export default {
   },
   methods: {
     getLogin(data) {
-      console.log(data);
+      this.loading = true;
       this.$store.dispatch('auth/postLogin', data).then(()=> {
-        console.log('Çalıştı action');
+        const _auth = this.$store.state.auth.user;
+        if (_auth.auth) {
+          this.$message.success(data)
+          this.$router.push('/admin');
+        }
+        else
+        {
+          this.$message.error("Username or password is invalid");
+        }
       })
       .catch((err) => {
         console.log(err);
       })
-    },
-    simulateLogin() { 
-       this.$axios.post('/api/auth/', this.model).then((data)=> {
-          this.$message.success(data)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.loading = false;
     },
     async login() {
       let valid = await this.$refs.form.validate();
@@ -118,7 +119,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 body {
   background: url("~assets/images/bg-background.png");
   background-size: cover;
