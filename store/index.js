@@ -10,7 +10,9 @@ const createStore = () => {
         },
 
         actions : {
-            // nuxtServerInit({ commit }, { req }){
+            nuxtServerInit({ commit }, { req }){
+                process.server?console.log('Server Tarafı'):console.log('Client Tarafı');
+
             //     let token = null
     
             //     if(req.headers.cookie){
@@ -24,7 +26,7 @@ const createStore = () => {
             //     }
     
             //     commit('setAuth', auth)
-            // }
+            }
         }
         
     });

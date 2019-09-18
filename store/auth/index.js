@@ -20,24 +20,20 @@ const actions = {
         .then((result)=> {
             console.log(result.data);
             if (result.data.auth) {
-                commit('CHANGE_AUTH', result);
+                commit('CHANGE_AUTH', result.data);
                 Cookie.set('token', result.data.token);
             }
-            
-            // this.$router.push('/admin');
-            
         })
         .catch((err) => {
             console.log(err);
           });
     },
-
 }
 
 const mutations = {
-    CHANGE_AUTH(state, {data}) {
-        console.log(data);
-        state.user.auth = data;
+    CHANGE_AUTH(state, data) {
+        console.log('Mutation CHANGE_AUTH');
+        state.user = data;
     },
 }
 

@@ -84,7 +84,7 @@ export default {
       this.$store.dispatch('auth/postLogin', data).then(()=> {
           const _auth = this.$store.state.auth.user;
           if (_auth.auth) {
-            this.$message.success(data)
+            this.$message.success('Giriş başarılı...');
             this.$router.push('/admin');
           }
           else {
