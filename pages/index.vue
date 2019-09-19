@@ -45,10 +45,6 @@ export default {
   name: "login",
   data() {
     return {
-      validCredentials: {
-        username: "lightscope",
-        password: "lightscope"
-      },
       model: {
         username: "",
         password: ""
@@ -79,13 +75,14 @@ export default {
     };
   },
   methods: {
-    getLogin(data) {
+    getLogin(context, data) {
       this.loading = true;
       this.$store.dispatch('auth/postLogin', data).then(()=> {
           const _auth = this.$store.state.auth.user;
           if (_auth.auth) {
             this.$message.success('Giriş başarılı...');
-            this.$router.push('/admin');
+            // this.$router.push('/admin');
+            context.redirect('/admin')
           }
           else {
             this.$message.error("Username or password is invalid");

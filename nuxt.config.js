@@ -47,6 +47,7 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    'cookie-universal-nuxt',
   ],
   env: {
       API_KEY: 'Buradasifre-yer-alacak',

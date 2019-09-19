@@ -6,8 +6,7 @@
 
 <style>
 html {
-  font-family: 'Open+Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Open Sans', Arial;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;

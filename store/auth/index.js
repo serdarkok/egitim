@@ -1,6 +1,5 @@
 // import axios from '@nuxtjs/axios';
 import Cookie from 'js-cookie';
-import Jwt from 'jsonwebtoken';
 
 const state = {
     user : {
@@ -14,11 +13,8 @@ const state = {
 
 const actions = {
     async postLogin({ commit }, data) {
-        console.log('Action çalıştı...');
-
         await this.$axios.post('/postLogin', data)
         .then((result)=> {
-            console.log(result.data);
             if (result.data.auth) {
                 commit('CHANGE_AUTH', result.data);
                 Cookie.set('token', result.data.token);
@@ -28,11 +24,23 @@ const actions = {
             console.log(err);
           });
     },
+
+    async verifyToken({commit}, data) {
+        const _control = await this.$axios.post('/verifyToken', data);
+        if (_control) {
+            commit('CHANGE_AUTH', _control.data);
+        }
+    },
+
+    async logOut({ commit }) {
+        Cookie.remove('token');
+        commit('CHANGE_AUTH', {auth: false});
+        this.$router.push('/')
+    }
 }
 
 const mutations = {
     CHANGE_AUTH(state, data) {
-        console.log('Mutation CHANGE_AUTH');
         state.user = data;
     },
 }

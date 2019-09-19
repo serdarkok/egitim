@@ -24,6 +24,9 @@
                     <el-menu-item index="4">
                         <nuxt-link to="/admin/users" tag="a" no-prefetch> Kullanıcılar </nuxt-link>
                     </el-menu-item>
+                    <el-menu-item index="5">
+                        <el-button type="warning" @click="Logout">Logout</el-button>
+                    </el-menu-item>
                     </el-menu>
             </el-header>
         </el-container>
@@ -33,7 +36,13 @@
 
 <script>
 export default {
-  middleware: "auth"
+  middleware: "auth",
+
+  methods : {
+    Logout() {
+      this.$store.dispatch('auth/logOut');
+    }
+  }
 };
 </script>
 
