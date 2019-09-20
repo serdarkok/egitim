@@ -11,7 +11,7 @@ const createStore = () => {
 
         actions : {
             async nuxtServerInit({ dispatch }, { req }){
-                // process.server?console.log('Nuxtserverinit Server Tarafı'):console.log('Nuxtserverinit Client Tarafı');
+                process.server?console.log('Nuxtserverinit Server Tarafı'):console.log('Nuxtserverinit Client Tarafı');
 
                 let {user} = '';
                 if (req.headers.cookie) {

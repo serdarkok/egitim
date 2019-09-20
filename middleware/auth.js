@@ -20,7 +20,7 @@ const _verifyUser = (context) => {
     if (!_status) {
         console.log('Cookie silinecek');
         // Cookie.remove('token');
-        process.server ? context.app.$cookies.removeAll() : this.$cookies.remove('token');;
+        context.app.$cookies.remove('token');
         return context.redirect('/');
     }
 }

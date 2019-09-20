@@ -12,7 +12,7 @@ import Jwt from 'jsonwebtoken';
                 // _validate true ya da false dönmektedir. false olursa şifre kabul edilmedi demektir. Bu şekilde state'de mutations yapılabilir.
                 if (_validate) {
                         const _token = Jwt.sign({mail: _user.email}, 'balik-bastan-kokar', {
-                            expiresIn: 3600
+                            expiresIn: 10
                         });
                         // console.log('Token: ' + JSON.stringify(_token));
                     res.json(
