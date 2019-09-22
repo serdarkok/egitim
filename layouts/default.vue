@@ -23,6 +23,10 @@ html {
   margin: 0;
 }
 
+body {
+  background-size: cover;
+}
+
 .button--green {
   display: inline-block;
   border-radius: 4px;

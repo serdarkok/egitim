@@ -1,4 +1,3 @@
-// import axios from '@nuxtjs/axios';
 import Cookie from 'js-cookie';
 
 const state = {
@@ -13,16 +12,16 @@ const state = {
 
 const actions = {
     async postLogin({ commit }, data) {
-        await this.$axios.post('/postLogin', data)
-        .then((result)=> {
-            if (result.data.auth) {
-                commit('CHANGE_AUTH', result.data);
-                Cookie.set('token', result.data.token);
+        // api/auth.js'i çağırıyor
+        try {
+            const _result = await this.$axios.post('/postLogin', data)
+            if (_result.data.auth) {
+                commit('CHANGE_AUTH', _result.data);
+                Cookie.set('token', _result.data.token);
             }
-        })
-        .catch((err) => {
-            console.log(err);
-          });
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     async verifyToken({commit}, data) {
@@ -35,7 +34,7 @@ const actions = {
     async logOut({ commit }) {
         Cookie.remove('token');
         commit('CHANGE_AUTH', {auth: false});
-        this.$router.push('/')
+        this.$router.push('/login');
     }
 }
 
@@ -45,7 +44,7 @@ const mutations = {
     },
 }
 
-const getters = { 
+const getters = {
 
 }
 

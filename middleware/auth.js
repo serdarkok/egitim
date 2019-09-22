@@ -5,7 +5,7 @@ const _verifyUser = (context) => {
     // const _auth = store.state.auth.user.auth;
     let token = null;
     
-    process.server ? console.log('Burası server') : console.log('Burası client');
+    // process.server ? console.log('Burası server') : console.log('Burası client');
     if (!process.server) {
         token = { token: Cookie.get('token') }
         // console.log(token);
@@ -20,8 +20,9 @@ const _verifyUser = (context) => {
     if (!_status) {
         console.log('Cookie silinecek');
         // Cookie.remove('token');
-        context.app.$cookies.remove('token');
-        return context.redirect('/');
+        process.server ? context.app.$cookies.remove('token'): Cookie.remove('token');
+        
+        return context.redirect('/login');
     }
 }
 

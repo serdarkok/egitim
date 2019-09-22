@@ -5,16 +5,17 @@ import Jwt from 'jsonwebtoken';
 
     app.post('/postLogin', async (req, res) => {
         try {
-            // console.log('Buraya geldi...');
+            // User modelinden kullanıcı adı find ediliyor
             const _user = await User.findOne({username: req.body.username});
             if (_user) {
+            // Eğer kullanıcı varsa şifre kontrolü yapılıyor
                 const _validate = await _user.isValidPassword(req.body.password);
                 // _validate true ya da false dönmektedir. false olursa şifre kabul edilmedi demektir. Bu şekilde state'de mutations yapılabilir.
                 if (_validate) {
+                        // jasonwebtoken üzerinden token oluşturuluyor
                         const _token = Jwt.sign({mail: _user.email}, 'balik-bastan-kokar', {
                             expiresIn: 10
                         });
-                        // console.log('Token: ' + JSON.stringify(_token));
                     res.json(
                         {
                             auth: true,

@@ -36,6 +36,7 @@
 
 <script>
 export default {
+  layout: "homepage",
   middleware: "auth",
 
   methods : {
