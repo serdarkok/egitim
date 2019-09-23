@@ -5,7 +5,7 @@
       <el-table-column prop="name" label="Name"></el-table-column>
       <el-table-column fixed="right" label="Operations" width="120">
         <template slot-scope="scope">
-          <el-button @click="handleClick" type="text" size="small">Düzenle</el-button>
+          <el-button @click="editClick(name)" type="text" size="small">Düzenle</el-button>
           <el-button type="text" size="small">Sil</el-button>
         </template>
       </el-table-column>
@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
     layout: 'admin',
     data() {
@@ -27,12 +25,20 @@ export default {
     },
     async asyncData(context) {
         try {
-          const _liste = await axios.get('/api/categories');
+            // Eğer axios'a context dışında yukarıdaki gibi import ederek ulaşırsan api kısayollarını kullanamazsın.
+          const _liste = await context.$axios.get('/categories');
+          console.log(_liste.data);
           if (_liste) {
-              return { tableData : _liste }
-          }  
+              return { tableData : _liste.data }
+          }
         } catch (error) {
             console.log(error);
+        }
+    },
+
+    methods : {
+        editClick(data) {
+            console.log(data);
         }
     }
 };
