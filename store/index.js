@@ -21,7 +21,7 @@ const createStore = () => {
                         console.log(err);
                     }
                 }
-                await dispatch('auth/verifyToken', user);
+                // await dispatch('auth/verifyToken', user);
             }
         }
         

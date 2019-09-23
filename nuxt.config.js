@@ -77,6 +77,7 @@ module.exports = {
     "~/api/db.js",
     "~/api/auth.js",
     "~/api/user.js",
+    "~/api/categories/index.js",
   ]
 
 

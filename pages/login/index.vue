@@ -39,10 +39,10 @@
 </template>
 
 <script>
-import axios from '@nuxtjs/axios';
+import axios from "@nuxtjs/axios";
 
 export default {
-  layout: 'login',
+  layout: "login",
   name: "login",
   data() {
     return {
@@ -53,24 +53,12 @@ export default {
       loading: false,
       rules: {
         username: [
-          {
-            required: true,
-            message: "Username is required",
-            trigger: "blur"
-          },
-          {
-            min: 4,
-            message: "Username length should be at least 5 characters",
-            trigger: "blur"
-          }
+          { required: true, message: "Kullanıcı adı alanı gereklidir", trigger: "blur" },
+          { min: 4, message: "Kullanıcı adı 5 karakterden kısa olmamalıdır", trigger: "blur" }
         ],
         password: [
-          { required: true, message: "Password is required", trigger: "blur" },
-          {
-            min: 5,
-            message: "Password length should be at least 5 characters",
-            trigger: "blur"
-          }
+          { required: true, message: "Şifre alanı gereklidir", trigger: "blur" },
+          { min: 5, message: "Şifre 5 karakterden kısa olmamalıdır", trigger: "blur" }
         ]
       }
     };
@@ -79,22 +67,15 @@ export default {
     getLogin(data) {
       this.loading = true;
       // store/auth/index.js çağırılıyor
-      this.$store.dispatch('auth/postLogin', data).then(()=> {
+      this.$store .dispatch("auth/postLogin", data)
+        .then(() => {
           const _auth = this.$store.state.auth.user;
           if (_auth.auth) {
-            this.$message.success('Giriş başarılı...');
-            // console.log(this);
-            // this.$router.push('/admin');
-            window.location.href = '/admin';
-            //context.redirect('/admin')
-          }
-          else {
-            this.$message.error("Username or password is invalid");
-          }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+            this.$message.success("Giriş başarılı...");
+            window.location.href = "/admin";
+          } else { this.$message.error("Username or password is invalid"); }
+        })
+        .catch(err => { console.log(err); });
       this.loading = false;
     },
     async login() {
@@ -105,7 +86,7 @@ export default {
       this.loading = true;
       await this.getLogin(this.model);
       this.loading = false;
-/*       if (
+      /*       if (
         this.model.username === this.validCredentials.username &&
         this.model.password === this.validCredentials.password
       ) {
@@ -124,5 +105,4 @@ body {
   background: url("~assets/images/bg-background.png");
   background-size: cover;
 }
-
 </style>
