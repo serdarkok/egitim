@@ -57,7 +57,11 @@ export default {
 
         this.$axios.post('/categories/add', this.form).then((result) => {
             console.log(result);
-            this.$message.success("Kayıt işlemi gerçekleşmiştir");
+            // this.$message.success("Kayıt işlemi gerçekleşmiştir");
+            this.$message({
+              type: 'success',
+              message: 'Kayıt işlemi gerçekleşmiştir'
+            });
             this.form.name = '';
         })
         .catch((error) => {
