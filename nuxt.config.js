@@ -40,7 +40,11 @@ module.exports = {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/moment'
   ],
+  moment: {
+    locales: ['tr']
+  },
   /*
   ** Nuxt.js modules
   */

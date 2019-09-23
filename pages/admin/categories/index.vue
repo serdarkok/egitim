@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column fixed prop="createdAt" label="Date"></el-table-column>
-      <el-table-column prop="name" label="Name"></el-table-column>
-      <el-table-column fixed="right" label="Operations" width="120">
+      <el-table-column fixed prop="createdAt" label="Tarih"></el-table-column>
+      <el-table-column prop="name" label="Kategori Adı"></el-table-column>
+      <el-table-column fixed="right" label="Ayarlar" width="120">
         <template slot-scope="scope">
-          <el-button @click="editClick(name)" type="text" size="small">Düzenle</el-button>
+          <el-button @click="editClick(scope.row._id)" type="text" size="small">Düzenle</el-button>
           <el-button type="text" size="small">Sil</el-button>
         </template>
       </el-table-column>
@@ -26,10 +26,18 @@ export default {
     async asyncData(context) {
         try {
             // Eğer axios'a context dışında yukarıdaki gibi import ederek ulaşırsan api kısayollarını kullanamazsın.
-          const _liste = await context.$axios.get('/categories');
-          console.log(_liste.data);
-          if (_liste) {
-              return { tableData : _liste.data }
+          const _lists = await context.$axios.get('/categories');
+          const _newLists = _lists.data.map(({ _id, name, createdAt }) => ({ _id: _id, name: name, createdAt: context.$moment(createdAt).format('DD MMMM YYYY') }));
+          console.log(_newLists);
+          
+          // tarih çevriminde forEach kullanımı
+          /* 
+            _lists.data.forEach((element, index) => {
+              _lists.data[index].createdAt = context.$moment(_lists.data[index].createdAt).format('DD MMMM YYYY');
+            }); 
+          */
+          if (_lists) {
+              return { tableData : _newLists }
           }
         } catch (error) {
             console.log(error);
@@ -37,8 +45,8 @@ export default {
     },
 
     methods : {
-        editClick(data) {
-            console.log(data);
+        editClick(id) {
+            console.log(id);
         }
     }
 };

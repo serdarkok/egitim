@@ -67,5 +67,14 @@ export default {
   }
 };
 </script>
+
 <style>
+.el-form-item {
+    margin-bottom: 7px;
+}
+
+.el-form-item__error {
+    font-size: 11px;
+    padding-top: 0px;
+}
 </style>
