@@ -67,7 +67,7 @@ export default {
     getLogin(data) {
       this.loading = true;
       // store/auth/index.js çağırılıyor
-      this.$store .dispatch("auth/postLogin", data)
+      this.$store.dispatch("auth/postLogin", data)
         .then(() => {
           const _auth = this.$store.state.auth.user;
           if (_auth.auth) {

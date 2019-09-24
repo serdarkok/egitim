@@ -6,7 +6,7 @@
       <el-table-column fixed="right" label="Ayarlar" width="120">
         <template slot-scope="scope">
           <el-button @click="editClick(scope.row._id)" type="text" size="small">Düzenle</el-button>
-          <el-button type="text" size="small">Sil</el-button>
+          <el-button @click="deleteClick(scope.row._id)" type="text" size="small">Sil</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -28,7 +28,7 @@ export default {
             // Eğer axios'a context dışında yukarıdaki gibi import ederek ulaşırsan api kısayollarını kullanamazsın.
           const _lists = await context.$axios.get('/categories');
           const _newLists = _lists.data.map(({ _id, name, createdAt }) => ({ _id: _id, name: name, createdAt: context.$moment(createdAt).format('DD MMMM YYYY') }));
-          console.log(_newLists);
+          await context.store.commit('categories/SET_CATEGORY', _newLists);
           
           // tarih çevriminde forEach kullanımı
           /* 
@@ -37,7 +37,7 @@ export default {
             }); 
           */
           if (_lists) {
-              return { tableData : _newLists }
+              return { tableData : context.store.getters['categories/allCategories'] }
           }
         } catch (error) {
             console.log(error);
@@ -46,7 +46,28 @@ export default {
 
     methods : {
         editClick(id) {
-            console.log(id);
+            if (id) {
+              this.$router.push('/admin/categories/edit/' + id);
+            }
+        },
+
+        deleteClick(id) {
+          if (id) {
+          this.$alert('Silmek istediğinize emin misiniz?', 'Uyarı', {
+            confirmButtonText: 'Tamam',
+              callback: action => {
+                if (action === 'confirm') {
+                  //TODO delete
+                    this.$store.commit('categories/REMOVE_CATEGORY', id);
+                    this.$axios.get('/categories/delete?id='+id).then((result) => {
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+                }
+              }
+        }); // $alert
+          }
         }
     }
 };

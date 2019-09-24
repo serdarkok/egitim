@@ -35,6 +35,27 @@ import Category from '../../models/Categories';
         }
     });
 
+    app.get('/categories/delete', async (req, res) => {
+        const _id = req.query.id;
+        if (_id) {
+            const _result = await Category.deleteOne({_id : _id});
+            if (_result) {
+                res.status(200).send('Ok');
+            }
+        }
+    });
+
+    app.get('/categories/:id', async (req, res) => {
+        console.log(req.params);
+        const _result = await Category.findById(req.params.id);
+        if (_result) {
+            res.status(200).send({
+                status: true,
+                data: _result
+            });            
+        }
+    });
+
 module.exports = {
         path: '/api/',
         handler: app

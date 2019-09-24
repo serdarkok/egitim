@@ -50,23 +50,24 @@ export default {
           this.$router.push('/admin');
       },
       async sendForm() {
-        let valid = await this.$refs.form.validate();
+        const valid = await this.$refs.form.validate();
             if (!valid) {
             return;
         }
-
-        this.$axios.post('/categories/add', this.form).then((result) => {
-            console.log(result);
-            // this.$message.success("Kayıt işlemi gerçekleşmiştir");
-            this.$message({
-              type: 'success',
-              message: 'Kayıt işlemi gerçekleşmiştir'
-            });
-            this.form.name = '';
-        })
-        .catch((error) => {
-            console.log(error);
+      
+      this.$store.dispatch("categories/addCategory", this.form)
+      .then((result) => {
+        // this.$message.success("Kayıt işlemi gerçekleşmiştir");
+        this.$message({
+          type: 'success',
+          message: 'Kayıt işlemi gerçekleşmiştir'
         });
+        this.form.name = '';
+      })
+      .catch((error) => {
+
+      });
+
       }
   }
 };
