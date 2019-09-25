@@ -10,7 +10,10 @@
           v-model="form.desc"
         ></el-input>
       </el-form-item>
-        <Choice form="form.choice"></Choice>
+        <Choice :choices="form.choice"></Choice>
+        <el-form-item>
+          <el-button type="success" icon="el-icon-plus" size="mini" circle></el-button>
+        </el-form-item>
       <el-form-item label="Aktif mi?">
         <el-checkbox-group v-model="form.status">
           <el-checkbox name="type" v-model="form.status"></el-checkbox>
@@ -35,10 +38,12 @@ export default {
       loading: "false",
       form: {
         name: "",
-        choice: {
-            name: 'Denee pşs',
-            radio: false,
-        },
+        choice: [
+          {id: 1, name: '', radio: false},
+          {id: 2, name: '', radio: false},
+          {id: 3, name: '', radio: false},
+          {id: 4, name: '', radio: false},
+        ],
         status: true,
       },
       rules: {

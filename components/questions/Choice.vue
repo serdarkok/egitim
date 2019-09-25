@@ -1,10 +1,10 @@
 <template>
   <el-row>
     <el-col :span="12">
-      <el-form-item label="Şık 1" prop="choice">
-        <el-input v-model="form.name">
+      <el-form-item v-for="(c,i) in choices" v-bind:key="i" v-bind:label="c.id" prop="choice">
+        <el-input v-model="c.name">
           <template slot="suffix">
-            <el-radio v-model="form.radio"></el-radio>
+            <el-switch v-model="c.radio"></el-switch>
           </template>
         </el-input>
       </el-form-item>
@@ -15,13 +15,8 @@
 <script>
 export default {
     props : {
-        form: {
-            type: Object,
-            required: true,
-            default: {
-                name: 'Unknown',
-                radio: false
-            }
+        choices : {
+            type: Array,
         }
     }
 }
