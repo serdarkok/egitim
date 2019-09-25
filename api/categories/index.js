@@ -1,6 +1,10 @@
 import Express from 'express';
 const app = new Express();
 import Category from '../../models/Categories';
+import bodyParser from 'body-parser';
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
     app.post('/categories/add', async (req, res) => {
         try { 
@@ -46,13 +50,24 @@ import Category from '../../models/Categories';
     });
 
     app.get('/categories/:id', async (req, res) => {
-        console.log(req.params);
         const _result = await Category.findById(req.params.id);
         if (_result) {
             res.status(200).send({
                 status: true,
                 data: _result
             });            
+        }
+    });
+
+    app.post('/categories/edit', async (req, res) => {
+        try {
+            const _ = await Category.updateOne({_id: req.body._id}, { name: req.body.name, status: req.body.status });
+            console.log(_);
+            if (_) {
+                res.status(200).send('Ok');
+            }
+        } catch (error) {
+            console.log(error)
         }
     });
 

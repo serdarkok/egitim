@@ -11,5 +11,5 @@ import Mongoose from 'mongoose';
         });
 
         module.exports = {
-            path: '/api/'
+            path: '/api/',
         }

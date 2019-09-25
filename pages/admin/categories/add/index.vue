@@ -21,7 +21,6 @@
         <el-button type="warning" @click="mainPage" size="small" plain>İptal</el-button>
       </el-form-item>
     </el-form>
-    {{ form.name }} {{ form.status }}
   </div>
 </template>
 

@@ -18,7 +18,9 @@
                     </el-submenu>
                     <el-submenu index="3">
                         <template slot="title">Sorular</template>
-                        <el-menu-item index="3-1">Ekle</el-menu-item>
+                        <el-menu-item index="3-1">
+                            <nuxt-link to="/admin/questions/add">Ekle</nuxt-link>
+                        </el-menu-item>
                         <el-menu-item index="3-2">Listele</el-menu-item>
                     </el-submenu>
                     <el-submenu index="4">
