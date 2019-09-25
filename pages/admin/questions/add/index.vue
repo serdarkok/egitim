@@ -12,7 +12,8 @@
       </el-form-item>
         <Choice :choices="form.choice"></Choice>
         <el-form-item>
-          <el-button type="success" icon="el-icon-plus" size="mini" circle></el-button>
+          <el-button type="default" icon="el-icon-plus" size="mini" circle></el-button>
+          <el-button type="default" icon="el-icon-delete" size="mini" circle></el-button>
         </el-form-item>
       <el-form-item label="Aktif mi?">
         <el-checkbox-group v-model="form.status">
