@@ -83,6 +83,7 @@ module.exports = {
     "~/api/auth.js",
     "~/api/user.js",
     "~/api/categories/index.js",
+    "~/api/questions/index.js",
   ]
 
 

@@ -1,5 +1,4 @@
 import Mongoose from 'mongoose';
-import Questions from './Questions';
 
 const Schema = Mongoose.Schema;
 
@@ -9,10 +8,10 @@ const choicesSchema = new Schema({
         required: true
     },
 
-    q_id : { 
+/*     q_id : { 
         type: Schema.Types.ObjectId,
         ref: 'Questions.Question'
-    },
+    }, */
 
     correct : {
         type: Boolean,
