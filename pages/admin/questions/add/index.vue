@@ -49,8 +49,8 @@ export default {
         name: "",
         c_id:"",
         choices: [
-          {id: '1', name: '', radio: false},
-          {id: '2', name: '', radio: false},
+          {dummy_id: '1', name: '', correct: false},
+          {dummy_id: '2', name: '', correct: false},
         ],
         status: true,
       },
@@ -75,7 +75,7 @@ export default {
   methods : {
     // Seçenek ekler
     addChoice(data) {
-      this.form.choices.push({id: String(this.form.choices.length + 1), name: '', radio: false});
+      this.form.choices.push({dummy_id: String(this.form.choices.length + 1), name: '', correct: false});
     },
 
     // Seçenek kaldırır
@@ -83,7 +83,7 @@ export default {
       // Choice.vue'den gelen index sayısına göre silme yapar
       this.form.choices.splice(data, 1);
       // this.form.choice array'i içerisindeki id'yi tekrar sıralar 1234...
-      const _ = this.form.choices.map((obj, index) => ({id : String(index + 1), name: obj.name, radio: obj.radio }));
+      const _ = this.form.choices.map((obj, index) => ({dummy_id : String(index + 1), name: obj.name, correct: obj.correct }));
       this.form.choices = _;
     },
 
@@ -92,13 +92,13 @@ export default {
         // Choice componentinden gelen switch true ya da false'i aşağıdaki if'e girerek choice array'i içindeki objeleri değiştirir.
         const _ = this.form.choices.map((obj, index) => {
           if (index === i && result === true) {
-            obj.radio = result
+            obj.correct = result
           }
           else if (index != i && result === false) {
-            obj.radio = result
+            obj.correct = result
           }
           else {
-            obj.radio = false;
+            obj.correct = false;
           }
           return obj;
         })
@@ -106,8 +106,12 @@ export default {
     },
 
     sendForm() {
+      console.log(this.form);
       this.$axios.post('/questions/add', this.form).then((result) => {
         console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
       })
       // console.log(this.form);
     }

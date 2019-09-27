@@ -2,10 +2,10 @@
   <div>
     <el-row v-for="(c,i) in choices" v-bind:key="i" align="middle" type="flex" class="choice-row">
       <el-col :span="12">
-        <el-form-item v-bind:label="c.id" prop="choice">
+        <el-form-item v-bind:label="c.dummy_id" prop="choice">
           <el-input v-model="c.name">
             <template slot="suffix">
-              <el-switch v-model="c.radio" @change="selectRadio(i, c.radio)"></el-switch>
+              <el-switch v-model="c.correct" @change="selectRadio(i, c.correct)"></el-switch>
             </template>
           </el-input>
         </el-form-item>

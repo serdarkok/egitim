@@ -3,23 +3,17 @@ import Mongoose from 'mongoose';
 const Schema = Mongoose.Schema;
 
 const choicesSchema = new Schema({
+    dummy_id : {
+        type: Number
+    },
+
     name : {
         type: String,
         required: true
     },
 
-/*     q_id : { 
-        type: Schema.Types.ObjectId,
-        ref: 'Questions.Question'
-    }, */
-
     correct : {
         type: Boolean,
-    },
-
-    status: {
-        type: Boolean,
-        default: true,
     },
 
     createdAt: {
@@ -33,4 +27,4 @@ const choicesSchema = new Schema({
     }
 });
 
-export default Mongoose.model('Choice', choicesSchema);
+// export default Mongoose.model('Choice', choicesSchema);

@@ -1,5 +1,4 @@
 import Mongoose from 'mongoose';
-import Choices from './Choices';
 
 const Schema = Mongoose.Schema;
 
@@ -16,10 +15,7 @@ const questionsSchema = new Schema({
 
     // choices: [Choices.schema],
 
-    choices : {
-        type: Schema.Types.ObjectId,
-        ref: 'Choices.schema'
-    },
+    choices : [],
     
     status : {
         type: Boolean,

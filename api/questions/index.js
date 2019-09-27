@@ -7,8 +7,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.post('/questions/add', async (req, res) => {
+    
+    console.log(req.body);
+
+    let _data = req.body;
     try {
-        const _ = new Question(req.body);
+        const _ = new Question(_data);
         _.save((err, data) => {
             if (err) {
                 res.status(400).send({
@@ -22,13 +26,21 @@ app.post('/questions/add', async (req, res) => {
                 });
             }
         });
-    } catch (error) {
+    } catch (err) {
+        console.log(err)
         res.status(400).send({
             status: false,
             message: err
         });
     }
 
+});
+
+app.get('/questions', async (req, res) => {
+    const _list = await Question.find({});
+    if (_list) {
+        res.status(200).send(_list);
+    }
 });
 
 module.exports = {
