@@ -2,7 +2,7 @@
   <div>
     <el-table :data="tableData" style="width: 100%">
       <el-table-column fixed prop="createdAt" :formatter="changeDate" label="Tarih"></el-table-column>
-      <el-table-column prop="c_id" label="Kategori"></el-table-column>
+      <el-table-column prop="c_id.name" label="Kategori"></el-table-column>
       <el-table-column prop="name" label="Soru"></el-table-column>
       <el-table-column fixed="right" label="Ayarlar" width="120">
         <template slot-scope="scope">

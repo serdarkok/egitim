@@ -8,8 +8,7 @@ const choicesSchema = new Schema({
     },
 
     name : {
-        type: String,
-        required: true
+        type: String
     },
 
     correct : {
@@ -27,4 +26,4 @@ const choicesSchema = new Schema({
     }
 });
 
-// export default Mongoose.model('Choice', choicesSchema);
+export default Mongoose.model('Choice', choicesSchema);

@@ -5,21 +5,21 @@ const Schema = Mongoose.Schema;
 const questionsSchema = new Schema({
     name : {
         type: String,
-        required: true
     },
 
     c_id : {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Category'
     },
-
-    // choices: [Choices.schema],
-
-    choices : [],
     
     status : {
         type: Boolean,
     },
+
+    choices: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Choice'
+    }],
 
     createdAt: {
         type: Date,
