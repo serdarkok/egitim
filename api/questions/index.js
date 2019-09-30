@@ -2,7 +2,6 @@ import Express from 'express';
 const app = new Express();
 import bodyParser from 'body-parser';
 import Question from '../../models/Questions';
-import Choice from '../../models/Choices';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -20,25 +19,25 @@ app.post('/questions/add', async (req, res) => {
     //     status: true 
     // }
 
-    // Önce şıkları kayıt ediyorum. Daha sonra bu kayıtlardan dönen promise'i değişkene atıyorum.
-    const c_hoices = await Promise.all([
+    // Önce şıkları kayıt ediyorum. Daha sonra bu kayıtlardan dönenleri promise'i değişkene atıyorum.
+    // create metodu promise dönüyor.
+/*     const c_hoices = await Promise.all([
             Choice.create(req.body.choices),
     ]);
 
-    console.log(c_hoices[0]);
+    console.log(c_hoices[0]); */
 
     try {
         // promise'den dönen şıkların id'lerini choices'e aktarıyorum.
-        const _question = {
+/*         const _question = {
             name: req.body.name,
             c_id: req.body.c_id,
             status: req.body.status,
             choices: c_hoices[0].map(choice => choice._id)
-        }
+        } */
 
-        console.log(_question);
-
-        const _ = await Question(_question);
+        // const _ = await Question(_question);
+        const _ = await Question(req.body);
         _.save((err, data) => {
             if (err) {
                 res.status(400).send({
@@ -62,10 +61,22 @@ app.post('/questions/add', async (req, res) => {
 });
 
 app.get('/questions', async (req, res) => {
-    const _list = await Question.find({}).populate('c_id').populate('choices');
+    const _list = await Question.find({}).populate('c_id');
     console.log(_list);
     if (_list) {
         res.status(200).send(_list);
+    }
+});
+
+app.get('/questions/:id', async (req, res) => {
+    console.log(req.params.id);
+    const _result = await Question.findById(req.params.id).populate('c_id');
+    console.log(_result);
+    if (_result) {
+        res.status(200).send({
+            status: true,
+            data: _result
+        });            
     }
 });
 

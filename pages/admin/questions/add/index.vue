@@ -1,7 +1,14 @@
 <template>
   <div>
-    <el-form :label-position="labelPosition" label-width="100px">
-      <el-form-item label="Soru">
+    <el-form 
+    :label-position="labelPosition" 
+    label-width="100px" 
+    :model="form"
+    :rules="rules"
+    ref="form"
+    @submit.native.prevent="sendForm"
+    >
+      <el-form-item label="Soru" prop="name">
         <el-input
           type="textarea"
           :autosize="{ minRows: 3, maxRows: 10}"
@@ -11,7 +18,7 @@
         ></el-input>
       </el-form-item>
       <Choice :choices="form.choices" @addChoice="addChoice" @removeChoice="removeChoice" @selectRadio="selectRadio"></Choice>
-      <el-form-item label="Kategori">
+      <el-form-item label="Kategori" prop="c_id">
         <el-select v-model="form.c_id" placeholder="Seçiniz">
           <el-option
             v-for="item in categories"
@@ -22,7 +29,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Aktif mi?">
+      <el-form-item label="Aktif mi?" class="mt-2">
         <el-checkbox-group v-model="form.status">
           <el-checkbox name="type" v-model="form.status"></el-checkbox>
         </el-checkbox-group>
@@ -46,8 +53,8 @@ export default {
       loading: "false",
       categories : '',
       form: {
-        name: "",
-        c_id:"",
+        name: '',
+        c_id: '',
         choices: [
           {dummy_id: '1', name: '', correct: false},
           {dummy_id: '2', name: '', correct: false},
@@ -58,15 +65,17 @@ export default {
         name: [
           {
             required: true,
-            message: "Kategori alanı gereklidir",
+            message: "Soru alanı gereklidir",
             trigger: "blur"
           },
           {
             min: 3,
-            message: "Kategori 3 karakterden kısa olmamalıdır",
+            message: "Soru 3 karakterden kısa olmamalıdır",
             trigger: "blur"
           }
-        ]
+        ],
+        c_id: [ {required: true, message: "Bir kategori seçmelisiniz", trigger: "blur"} ],
+        choices: [ {required: true, type: Array, message: 'Şık girmelisiniz', trigger: "blur"} ],
       }
     };
   },
@@ -105,7 +114,12 @@ export default {
         this.form.choices = _;
     },
 
-    sendForm() {
+    async sendForm() {
+      const valid = await this.$refs.form.validate();
+        if (!valid) {
+          return;
+      }
+
       console.log(this.form);
       this.$axios.post('/questions/add', this.form).then((result) => {
         console.log(result);
@@ -113,7 +127,6 @@ export default {
       .catch((error) => {
         console.log(error);
       })
-      // console.log(this.form);
     }
   },
 

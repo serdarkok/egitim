@@ -16,10 +16,12 @@ const questionsSchema = new Schema({
         type: Boolean,
     },
 
-    choices: [{
+/*     choices: [{
         type: Schema.Types.ObjectId,
         ref: 'Choice'
-    }],
+    }], */
+
+    choices: [],
 
     createdAt: {
         type: Date,

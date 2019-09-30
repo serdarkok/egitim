@@ -6,7 +6,7 @@
       <el-table-column prop="name" label="Soru"></el-table-column>
       <el-table-column fixed="right" label="Ayarlar" width="120">
         <template slot-scope="scope">
-          <el-button type="text" size="small">Düzenle</el-button>
+          <el-button type="text" @click="editClick(scope.row._id)" size="small">Düzenle</el-button>
           <el-button type="text" size="small">Sil</el-button>
         </template>
       </el-table-column>
@@ -41,6 +41,12 @@ export default {
   methods: {
     changeDate(context, row, column) {
       return moment(row.createdAt).format("DD MMMM YYYY");
+    },
+
+    editClick(id) {
+      if (id) {
+        this.$router.push("/admin/questions/edit/" + id);
+      }
     }
   }
 };
