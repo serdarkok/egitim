@@ -5,8 +5,8 @@
       <el-table-column prop="name" label="Kategori Adı"></el-table-column>
       <el-table-column fixed="right" label="Ayarlar" width="120">
         <template slot-scope="scope">
-          <el-button @click="editClick(scope.row._id)" type="text" size="small">Düzenle</el-button>
-          <el-button @click="deleteClick(scope.row._id)" type="text" size="small">Sil</el-button>
+          <el-button @click="editClick(scope.row._id)"  v-if="scope.row._id != '5d930ede2a55cc289b587357'" type="text" size="small">Düzenle</el-button>
+          <el-button @click="deleteClick(scope.row._id)" v-if="scope.row._id != '5d930ede2a55cc289b587357'" type="text" size="small">Sil</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,7 +53,7 @@ export default {
 
         deleteClick(id) {
           if (id) {
-          this.$alert('Silmek istediğinize emin misiniz?', 'Uyarı', {
+          this.$alert('Dikkat, silmek istediğiniz kategori içerisindeki sorular "Kategorisiz" kategorisine aktarılacaktır. Silmek istediğinize emin misiniz?', 'Uyarı', {
             confirmButtonText: 'Tamam',
               callback: action => {
                 if (action === 'confirm') {

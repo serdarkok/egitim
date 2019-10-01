@@ -1,6 +1,13 @@
 <template>
   <div v-if="form">
-    <el-form :label-position="labelPosition" label-width="100px">
+    <el-form
+    :label-position="labelPosition"
+    label-width="100px"
+    :model="form"
+    :rules="rules"
+    ref="form"
+    @submit.native.prevent="sendForm"
+    >
       <el-form-item label="Soru">
         <el-input
           type="textarea"
@@ -12,7 +19,7 @@
       </el-form-item>
       <Choice :choices="form.choices" @addChoice="addChoice" @removeChoice="removeChoice" @selectRadio="selectRadio"></Choice>
       <el-form-item label="Kategori">
-        <el-select v-model="form.c_id" placeholder="Seçiniz">
+        <el-select v-model="form.c_id._id" placeholder="Seçiniz">
           <el-option
             v-for="item in categories"
             :key="item._id"
@@ -28,8 +35,8 @@
         </el-checkbox-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="small" plain submit>Kaydet</el-button>
-        <el-button type="warning" @click="Cancel" size="small" plain>İptal</el-button>
+        <el-button type="primary" @click="sendForm" size="small" plain submit>Kaydet</el-button>
+        <el-button type="warning" @click="mainPage" size="small" plain>İptal</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -48,10 +55,19 @@ export default {
             categories : '',
             form: '',
             rules: {
-              name : [
-                { required: true, message: "Kategori alanı gereklidir", trigger: "blur" },
-                { min: 3, message: "Kategori 3 karakterden kısa olmamalıdır", trigger: "blur" }
-              ]
+              name: [
+                {
+                  required: true,
+                  message: "Soru alanı gereklidir",
+                  trigger: "blur"
+                },
+                {
+                  min: 3,
+                  message: "Soru 3 karakterden kısa olmamalıdır",
+                  trigger: "blur"
+                }
+              ],
+              c_id: [ {required: true, message: "Bir kategori seçmelisiniz", trigger: "blur"} ],
             }
         }
     },
@@ -76,7 +92,7 @@ export default {
         this.form.choices.push({dummy_id: String(this.form.choices.length + 1), name: '', correct: false});
         },
 
-        Cancel() {
+        mainPage() {
             this.$router.push('/admin/questions');
         },
 
@@ -106,6 +122,23 @@ export default {
             })
             this.form.choices = _;
         },
+
+        async sendForm() {
+        // Validation
+        const valid = await this.$refs.form.validate();
+            if (!valid) {
+            return;
+        }
+        const _ = await this.$axios.post('/questions/edit', this.form);
+        if (_.status === 200) {
+          this.$message({
+            type: 'success',
+            message: 'Güncelleme işlemi gerçekleşmiştir'
+        });
+        // redirect main page
+        this.mainPage();
+        }
+      },
     }
 }
 </script>

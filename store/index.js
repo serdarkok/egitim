@@ -2,6 +2,7 @@ import vuex from 'vuex';
 import auth from './auth';
 import user from './user';
 import categories from './categories';
+import questions from './questions';
 
 const createStore = () => {
     return new vuex.Store({
@@ -9,6 +10,7 @@ const createStore = () => {
             auth: auth,
             user: user,
             categories: categories,
+            questions: questions,
         },
 
         actions : {

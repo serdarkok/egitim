@@ -2,7 +2,9 @@
   <div>
     <el-row v-for="(c,i) in choices" v-bind:key="i" align="middle" type="flex" class="choice-row">
       <el-col :span="12">
-        <el-form-item v-bind:label="c.dummy_id" prop="choices">
+        <el-form-item v-bind:label="c.dummy_id"
+        :prop="'choices.'+i+'.name'" 
+        :rules="{required: true, message: 'Şık girmelisiniz', trigger: 'blur'}">
           <el-input v-model="c.name">
             <template slot="suffix">
               <el-switch v-model="c.correct" @change="selectRadio(i, c.correct)"></el-switch>
@@ -46,7 +48,7 @@ export default {
 }
 
 .choice-row {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .choice-row:first-child {

@@ -2,6 +2,7 @@ import Express from 'express';
 const app = new Express();
 import Category from '../../models/Categories';
 import bodyParser from 'body-parser';
+import Question from '../../models/Questions';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -43,6 +44,7 @@ app.use(bodyParser.json());
         const _id = req.query.id;
         if (_id) {
             const _result = await Category.deleteOne({_id : _id});
+            const _move = await Question.updateMany({c_id : _id}, {c_id : '5d930ede2a55cc289b587357'});
             if (_result) {
                 res.status(200).send('Ok');
             }

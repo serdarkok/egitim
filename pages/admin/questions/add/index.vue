@@ -36,7 +36,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" size="small" @click="sendForm" plain submit>Kaydet</el-button>
-        <el-button type="warning" size="small" plain>İptal</el-button>
+        <el-button type="warning" size="small" @click="mainPage" plain>İptal</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -56,8 +56,8 @@ export default {
         name: '',
         c_id: '',
         choices: [
-          {dummy_id: '1', name: '', correct: false},
-          {dummy_id: '2', name: '', correct: false},
+          {dummy_id: '1', name: null, correct: false},
+          {dummy_id: '2', name: null, correct: false},
         ],
         status: true,
       },
@@ -75,7 +75,6 @@ export default {
           }
         ],
         c_id: [ {required: true, message: "Bir kategori seçmelisiniz", trigger: "blur"} ],
-        choices: [ {required: true, type: Array, message: 'Şık girmelisiniz', trigger: "blur"} ],
       }
     };
   },
@@ -112,6 +111,10 @@ export default {
           return obj;
         })
         this.form.choices = _;
+    },
+
+    mainPage() {
+      this.$router.push('/admin/questions');
     },
 
     async sendForm() {

@@ -16,11 +16,16 @@
                         <el-menu-item index="3-2" route="/admin/questions">Listele</el-menu-item>
                     </el-submenu>
                     <el-submenu index="4">
-                        <template slot="title">Kullanıcılar</template>
-                        <el-menu-item index="4-1">Ekle</el-menu-item>
-                        <el-menu-item index="4-2">Listele</el-menu-item>
+                        <template slot="title">Quizler</template>
+                        <el-menu-item index="4-1" route="/admin/quizzes/add"> Ekle </el-menu-item>
+                        <el-menu-item index="4-2" route="/admin/quizzes">Listele</el-menu-item>
                     </el-submenu>
-                    <el-menu-item index="5">
+                    <el-submenu index="5">
+                        <template slot="title">Kullanıcılar</template>
+                        <el-menu-item index="5-1">Ekle</el-menu-item>
+                        <el-menu-item index="5-2">Listele</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item index="6">
                         <el-button type="warning" @click="Logout">Çıkış Yap</el-button>
                     </el-menu-item>
                     </el-menu>

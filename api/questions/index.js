@@ -62,21 +62,45 @@ app.post('/questions/add', async (req, res) => {
 
 app.get('/questions', async (req, res) => {
     const _list = await Question.find({}).populate('c_id');
-    console.log(_list);
     if (_list) {
         res.status(200).send(_list);
     }
 });
 
 app.get('/questions/:id', async (req, res) => {
-    console.log(req.params.id);
-    const _result = await Question.findById(req.params.id).populate('c_id');
-    console.log(_result);
+    const _result = await Question.findById(req.params.id).populate('c_id', '_id');
     if (_result) {
         res.status(200).send({
             status: true,
             data: _result
         });            
+    }
+});
+
+app.post('/questions/edit', async (req, res) => {
+    try {
+        const _ = await Question.updateOne({_id: req.body._id}, req.body);
+        console.log(_);
+        if (_) {
+            res.status(200).send('Ok');
+        }
+    } catch (error) {
+        console.log(error)
+    }
+});
+
+app.get('/questions/delete/:id', async (req, res) => {
+    const _id = req.params.id;
+    console.log('id:' + _id);
+    if (_id) {
+        try {
+            const _result = await Question.deleteOne({_id : _id});
+            if (_result) {
+                res.status(200).send('Ok');
+            } 
+        } catch (error) {
+            console.log(error);
+        }
     }
 });
 
