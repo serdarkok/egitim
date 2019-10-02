@@ -3,24 +3,32 @@
     :model="form"
     :label-position="labelPosition" 
     label-width="100px" 
+    :rules="rules"
+    ref="form"
     >
-    {{ questions }}
       <el-form-item label="Quiz Adı" prop="name">
           <el-input v-model="form.name" placeholder="İsim"></el-input>
       </el-form-item>
-      <el-form-item label="Soru Süresi" prop="name">
+      <el-form-item label="Süresi" prop="time">
           <el-input-number v-model="form.time" :min="0" :max="100" size="small" :step="5"></el-input-number>
       </el-form-item>
-      <el-form-item label="Başla">
-        <el-date-picker
-            v-model="form.start.date"
-            type="date"
-            format="dd.MM.yyyy"
-            value-format="timestamp"
-            placeholder="Tarihi"
-            firstDayOfWeek="3"
-            >
-        </el-date-picker>
+      <el-row>
+        <el-divider content-position="left">Başlangıç Tarih ve Saati</el-divider>
+      <el-col :span="7">
+        <el-form-item label="Tarih" prop="start.date">
+            <el-date-picker
+                v-model="form.start.date"
+                type="date"
+                format="dd.MM.yyyy"
+                value-format="yyyyMMdd"
+                placeholder="Tarihi"
+                firstDayOfWeek="3"
+                >
+            </el-date-picker>
+            </el-form-item>
+      </el-col>
+      <el-col :span="10">
+        <el-form-item label="Saat" prop="start.time">
         <el-time-select
             placeholder="Saati"
             v-model="form.start.time"
@@ -32,16 +40,25 @@
         >
         </el-time-select>
       </el-form-item>
-            <el-form-item label="Bitiş">
-        <el-date-picker
-            v-model="form.finish.date"
-            type="date"
-            format="dd.MM.yyyy"
-            value-format="timestamp"
-            placeholder="Tarihi"
-            firstDayOfWeek="3"
-            >
-        </el-date-picker>
+      </el-col>
+    </el-row>
+      <el-row>
+        <el-divider content-position="left">Bitiş Tarih ve Saati</el-divider>
+      <el-col :span="7">
+        <el-form-item label="Tarih" prop="finish.date">
+            <el-date-picker
+                v-model="form.finish.date"
+                type="date"
+                format="dd.MM.yyyy"
+                value-format="yyyyMMdd"
+                placeholder="Tarihi"
+                firstDayOfWeek="3"
+                >
+            </el-date-picker>
+            </el-form-item>
+      </el-col>
+      <el-col :span="10">
+        <el-form-item label="Saat" prop="finish.time">
         <el-time-select
             placeholder="Saati"
             v-model="form.finish.time"
@@ -53,16 +70,12 @@
         >
         </el-time-select>
       </el-form-item>
-      <el-form-item label="Kategori Seç">
-        <el-select v-model="form.category" placeholder="Select">
-            <el-option
-                v-for="item in questions"
-                :key="item._id"
-                :label="item.name"
-                :value="item._id">
-            </el-option>
-        </el-select>
-      </el-form-item>
+      </el-col>
+    </el-row>
+    <el-form-item>
+        <el-button type="primary" size="small" @click="sendForm" plain submit>Kaydet</el-button>
+        <el-button type="warning" size="small" @click="mainPage" plain>İptal</el-button>
+    </el-form-item>
     </el-form>
 </template>
 
@@ -70,6 +83,16 @@
 export default {
     layout: 'admin',
     data() {
+        // Bu kısım custom validation kısmıdır. Bitiş tarihini başlangıç tarihine göre kıyaslayarak uyarı verir
+        var validatePass = (rule, value, callback) => {
+            if (value == '') {
+                callback(new Error('Bitiş tarihi girmelisiniz'));
+            } else if (value < this.form.start.date) {
+            callback(new Error('Başlangıç tarihinden sonra olmalıdır'));
+            } else {
+                callback();
+            }
+        };
         return {
             labelPosition: 'right',
             form: {
@@ -84,15 +107,59 @@ export default {
                     time: ''
                 }
             },
-            questions: []
+            rules: {
+                name: [
+                {
+                    required: true,
+                    message: "Quiz Adı alanı gereklidir",
+                    trigger: "blur"
+                },
+                {
+                    min: 3,
+                    message: "Soru 3 karakterden kısa olmamalıdır",
+                    trigger: "blur"
+                }
+                ],
+                time: [
+                    {type: 'number', min: 5, message: "Süre en az 5 saniye olmalıdır", trigger: "change"}
+                    ],
+                start: {
+                    date: [{required: true, message: "Başlangıç tarihi girmelisiniz"}],
+                    time: [{required: true, message: "Başlangıç saati girmelisiniz"}],
+                },
+                finish: {
+                    date: [{required: true, validator: validatePass, trigger: "blur"}],
+                    time: [{required: true, message: "Bitiş saati girmelisiniz"}]
+                }
+
+            }
         }
     },
 
     async mounted() {
-      const _ = await this.$axios.get('/questions');
-      this.questions = _.data;
+    },
+
+    methods : {
+    mainPage() {
+      this.$router.push('/admin/quizzes');
+    },
+
+    async sendForm() {
+       const valid = await this.$refs.form.validate();
+        if (!valid) {
+          return;
+      }
+
+      console.log(this.form);
+      this.$axios.post('/quizzes/add', this.form).then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      }) 
     }
-}
+  },
+    }
 </script>
 
 <style>
