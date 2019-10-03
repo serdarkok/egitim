@@ -35,7 +35,7 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-    // '@/plugins/vue-draggable'
+    '@/plugins/vue-draggable'
   ],
   /*
   ** Nuxt.js dev-modules

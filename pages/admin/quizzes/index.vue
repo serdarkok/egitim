@@ -12,9 +12,9 @@
         </el-table-column>
         <el-table-column fixed="right" label="Ayarlar" width="180">
             <template slot-scope="scope">
-            <el-button type="text" size="small">Soru Ekle</el-button>
-            <el-button type="text" size="small">Düzenle</el-button>
-            <el-button type="text" size="small">Sil</el-button>
+            <el-button type="text" @click="addQuestions(scope.row.id)" size="small">Soru Ekle</el-button>
+            <el-button type="text" @click="editQuiz(scope.row._id)" size="small">Düzenle</el-button>
+            <el-button type="text" @click="deleteClick(scope.row._id)" size="small">Sil</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -32,10 +32,11 @@ export default {
     },
     async asyncData(context) {
         try {
-          const _lists = await context.$axios.get('/quizzes');
+            const _lists = await context.$axios.get('/quizzes');
+            await context.store.commit("quizzes/SET", _lists.data);
         
           if (_lists) {
-              return { tableData : _lists.data }
+              return { tableData : context.store.getters["quizzes/allQuizzes"] }
           }
         } catch (error) {
             console.log(error);
@@ -46,6 +47,33 @@ export default {
         changeDate(context, row, column) {
         return moment(column).format("DD MMMM YYYY hh:mm");
         },
+
+        editQuiz(data) {
+            this.$router.push('/admin/quizzes/edit/'+data);
+        },
+
+        deleteClick(id) {
+            if (id) {
+                this.$alert('Silmek istediğinize emin misiniz?', 'Uyarı', {
+                    confirmButtonText: 'Tamam',
+                    callback: action => {
+                        if (action === 'confirm') {
+                        //TODO delete
+                            this.$store.commit("quizzes/REMOVE", id);
+                            this.$axios.delete('/quizzes/delete?id='+id).then((result) => {
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                        }
+                    }
+                }); // $alert
+            }
+        },
+
+        addQuestions(id) {
+            this.$router.push('/admin/quizzes/addquestion');
+        }
     }
 }
 </script>

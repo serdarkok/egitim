@@ -20,7 +20,7 @@
                 v-model="form.start.date"
                 type="date"
                 format="dd.MM.yyyy"
-                value-format="yyyyMMdd"
+                value-format="yyyy-MM-dd"
                 placeholder="Tarihi"
                 firstDayOfWeek="3"
                 >
@@ -50,7 +50,7 @@
                 v-model="form.finish.date"
                 type="date"
                 format="dd.MM.yyyy"
-                value-format="yyyyMMdd"
+                value-format="yyyy-MM-dd"
                 placeholder="Tarihi"
                 firstDayOfWeek="3"
                 >
@@ -72,10 +72,12 @@
       </el-form-item>
       </el-col>
     </el-row>
-    <el-form-item>
-        <el-button type="primary" size="small" @click="sendForm" plain submit>Kaydet</el-button>
-        <el-button type="warning" size="small" @click="mainPage" plain>İptal</el-button>
-    </el-form-item>
+    <el-row>
+        <el-form-item>
+            <el-button type="primary" size="small" @click="sendForm" plain submit>Kaydet</el-button>
+            <el-button type="warning" size="small" @click="mainPage" plain>İptal</el-button>
+        </el-form-item>
+    </el-row>
     </el-form>
 </template>
 
@@ -149,15 +151,18 @@ export default {
         if (!valid) {
           return;
       }
-
-      console.log(this.form);
       this.$axios.post('/quizzes/add', this.form).then((result) => {
-        console.log(result);
+        this.$message({
+          type: 'success',
+          message: 'Kayıt işlemi gerçekleşmiştir'
+        });
+        this.$router.push('/admin/quizzes');
       })
       .catch((error) => {
         console.log(error);
-      }) 
-    }
+      });
+    },
+
   },
     }
 </script>

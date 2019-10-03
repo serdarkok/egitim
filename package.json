@@ -23,7 +23,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",
     "nuxt": "^2.9.2",
-    "vuedraggable": "^2.23.1",
+    "vuedraggable": "^2.23.2",
     "webpack": "^4.40.1"
   },
   "devDependencies": {

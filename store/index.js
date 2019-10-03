@@ -3,6 +3,7 @@ import auth from './auth';
 import user from './user';
 import categories from './categories';
 import questions from './questions';
+import quizzes from './quizzes';
 
 const createStore = () => {
     return new vuex.Store({
@@ -11,6 +12,7 @@ const createStore = () => {
             user: user,
             categories: categories,
             questions: questions,
+            quizzes: quizzes,
         },
 
         actions : {

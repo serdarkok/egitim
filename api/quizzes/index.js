@@ -7,19 +7,19 @@ import Moment from 'moment';
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// tarih ile saati birleştirip mongdb formatına çevirir
+function mergeDate(date, time) {
+    if (date && time) {
+        var _ = date + ' ' + time
+        return Moment(_, "YYYY-MM-DD HH:mm");        
+    }
+    return;
+}
+
 app.post('/quizzes/add', async (req, res) => {
     var _quiz = req.body;
-    console.log(_quiz);
-    
-    var _ = _quiz.start.date + ' ' + _quiz.start.time
-    const newStartDate = Moment(_, "YYYYMMDD HH:mm");
-    _ = _quiz.finish.date + ' ' + _quiz.finish.time
-    const newFinishDate = Moment(_, "YYYYMMDD HH:mm");
-    _quiz.start.date = newStartDate;
-    _quiz.finish.date = newFinishDate;
-
-    console.log('Buraya uğramadı');
-    console.log(_quiz);
+    _quiz.start.date = mergeDate(_quiz.start.date, _quiz.start.time);
+    _quiz.finish.date = mergeDate(_quiz.finish.date, _quiz.finish.time);
 
     try {
          const __ = new Quiz(_quiz);
@@ -46,6 +46,44 @@ app.get('/quizzes', async (req, res) => {
     if (_list) {
         console.log(_list);
         res.status(200).send(_list);
+    }
+});
+
+app.delete('/quizzes/delete', async (req, res) => {
+    const _id = req.query.id;
+    
+    if (_id) {
+        const _result = await Quiz.deleteOne({_id : _id});
+        if (_result) {
+            res.status(200).send('Ok');
+        }
+    }
+});
+
+app.get('/quizzes/:id', async (req, res) => {
+    const _result = await Quiz.findById(req.params.id);
+    if (_result) {
+        res.status(200).send({
+            status: true,
+            data: _result
+        });            
+    }
+});
+
+app.post('/quizzes/edit', async (req, res) => {
+    var _quiz = req.body;
+
+    _quiz.start.date = mergeDate(_quiz.start.date, _quiz.start.time);
+    _quiz.finish.date = mergeDate(_quiz.finish.date, _quiz.finish.time);
+    
+    try {
+        const _ = await Quiz.updateOne({_id: req.body._id}, _quiz);
+        console.log(_);
+        if (_) {
+            res.status(200).send('Ok');
+        }
+    } catch (error) {
+        console.log(error)
     }
 });
 
