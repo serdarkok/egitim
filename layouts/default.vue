@@ -7,7 +7,7 @@
 <style>
 html {
   font-family: 'Open Sans', Arial;
-  font-size: 16px;
+  font-size: 14px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;

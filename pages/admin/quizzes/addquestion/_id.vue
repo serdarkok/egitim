@@ -1,27 +1,55 @@
 <template>
-<el-row v-if="questions">
-  <el-col :span="12" class="border heights">
-      <el-table :data="questions" style="width: 100%" @selection-change="handleSelectionChange" ref="multipleTable" @current-change="selectRow">
-        <el-table-column type="selection" width="35"></el-table-column>
-        <el-table-column fixed prop="name" label="Adı"></el-table-column>
-      </el-table>
+<el-row v-if="questions" :gutter="10">
+  <el-col :span="12">
+      <el-card :body-style="{ padding: '0px' }" shadow="never" class="heights">
+          <div slot="header" :body-style="{ height: '10px' }">
+            <el-select v-model="selected_category" placeholder="Soru Kategorisi Seç" size="small">
+                <el-option label="Hepsi" value=""> </el-option>
+                <el-option
+                v-for="item in categories"
+                :key="item._id"
+                :label="item.name"
+                :value="item._id">
+                </el-option>
+            </el-select>
+          </div>
+          <ul class="item-select">
+              <li v-for="(item, index) in questions" :key="index" v-if="item.c_id._id == selected_category || selected_category == ''">
+                    <el-row type="flex" align="middle">
+                        <el-col :span="22">{{ item.name }}</el-col>
+                        <el-col :span="2"><el-button size="mini" type="success" @click="addQuestion(item)" icon="el-icon-arrow-right" plain></el-button></el-col>
+                    </el-row>
+              </li>
+          </ul>
+      </el-card>
   </el-col>
-  <el-col :span="12" class="border heights ">
-    <draggable
-        tag="ul"
-        class="yl"
-        v-model="questions1"
-        @start="isDragging = true"
-        @end="isDragging = false"
-      >
-      <li  class="list-group-item"
-           v-for="(element, index) in questions1"
-           :key="index">
-           {{ element.name }}
-           </li>
-            </draggable>
+  <el-col :span="12">
+    <el-card :body-style="{ padding: '0px' }" shadow="never" class="heights">
+        <div slot="header">
+            <el-row type="flex" align="middle" justify="space-between">
+                <el-col :span="16">
+                    <span>Eklenen Sorular</span>
+                </el-col>
+                <el-col :span="8">
+                    <el-button type="primary" size="mini" @click="sendForm" plain submit :disabled="questions1 < 1">Kaydet</el-button>
+                    <el-button type="warning" size="mini" @click="mainPage" plain>İptal</el-button>
+                </el-col>
+            </el-row>
+        </div>
+        <draggable
+            tag="ul"
+            class="item-select"
+            v-model="questions1">
+              <li v-for="(item, index) in questions1" :key="index" :body-style="{ cursor: 'move' }">
+                    <el-row type="flex" align="middle">
+                        <el-col :span="3"><el-button size="mini" type="danger" icon="el-icon-arrow-left" @click="removeQuestion(item)" plain></el-button></el-col>
+                        <el-col :span="21">{{ item.name }}</el-col>
+                    </el-row>
+              </li>
+        </draggable>
+    </el-card>
+    <!-- <raw :value="questions1" title="Ornek" /> -->
   </el-col>
-
 </el-row>
 </template>
 
@@ -32,36 +60,71 @@ export default {
     data() {
         return {
             questions: '',
-            questions1: ''
+            questions1: [],
+            categories: null,
+            selected_category: '',
+            checked: null,
         }
     },
 
-    async mounted() {
-      const _questions = await this.$axios.get("/questions");
-      this.questions = _questions.data;
+    mounted() {
+        this.$nextTick( async () => {
+            const _questions = await this.$axios.get("/questions");
+            this.questions = _questions.data;
+            const _categories = await this.$axios.get('/categories');
+            if (_categories) {
+                this.$store.commit('categories/SET_CATEGORY', _categories.data);
+            }
+            this.categories = this.$store.getters["categories/allCategories"];
+        });
     },
 
     methods : {
-        toggleSelection(rows) {
-            if (rows) {
-            rows.forEach(row => {
-                this.$refs.multipleTable.toggleRowSelection(row);
+        addQuestion(data) {
+            this.questions1.push(data);
+            this.questions = this.questions.filter(obj => {
+                if (obj._id != data._id) {
+                    return obj;
+                }
             });
-            } else {
-            this.$refs.multipleTable.clearSelection();
-            }
         },
-        handleSelectionChange(val) {
-            console.log('secildi');
-            this.questions1 = val;
+
+        removeQuestion(data) {
+            this.questions.push(data);
+            this.questions1 = this.questions1.filter(obj => {
+                if (obj._id != data._id) {
+                    return obj;
+                }
+            });            
         },
-        selectRow(row){
-            console.log(row);
-            // this.handleSelectionChange(val);
+
+        // select içerisindeki seçilen kategoriye göre questions'u düzenler
+        changeCategory(data) {
+            this.questions = this.questions.filter(obj => {
+                if (obj.c_id._id == data) {
+                    return obj;
+                } else if (data == '') {
+                    return obj;
+                } else {
+                }
+            });
+        },
+
+        mainPage() {
+        this.$router.push('/admin/quizzes');
+        },
+
+        async sendForm() {
+        console.log(this.form);
+        // TODO BURAYA QUIZ MODELİ İÇİNDEKİ QUESTİON KEY'İNE EKLEME YAPACAKSIN
+/*         this.$axios.post('/questions/add', this.form).then((result) => {
+            console.log(result);
+        })
+        .catch((error) => {
+            console.log(error);
+        }) */
         }
-    
     }
-    
 }
 </script>
 
@@ -71,18 +134,21 @@ export default {
 }
 
 .heights {
-    height: 300px;
+    height: 500px;
 }
 
-.yl {
+.item-select {
     list-style: none;
     padding-left: 0px;
+    cursor: move;
 }
 
-.yl li {
-    background-color: #f4f4f4;
+.item-select li {
     padding: 5px;
-    margin-top: 5px;
-    cursor: move;
+    border-bottom: 1px solid #EBEEF5;
+}
+
+.el-card__header {
+    padding: 10px 20px;
 }
 </style>
