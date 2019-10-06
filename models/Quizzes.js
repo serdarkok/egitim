@@ -11,9 +11,10 @@ const quizzesSchema = new Schema({
         type: Number,
         required: true
     },
-    questions: {
-        type: Array,
-    },
+    questions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Question'
+    }],
     start: {
         date: {
             type: Date

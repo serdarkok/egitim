@@ -48,7 +48,7 @@
               </li>
         </draggable>
     </el-card>
-    <!-- <raw :value="questions1" title="Ornek" /> -->
+    <raw :value="questions1" title="Ornek" />
   </el-col>
 </el-row>
 </template>
@@ -76,6 +76,26 @@ export default {
                 this.$store.commit('categories/SET_CATEGORY', _categories.data);
             }
             this.categories = this.$store.getters["categories/allCategories"];
+
+            // Quiz içerisine önceden eklenmiş soruları sorguluyoruz, bu soruları questions1 array'ine aktarıyoruz ve questions'dan siliyoruz.
+
+            const _quiz = await this.$axios.get('/quizzes/'+this.$route.params.id);
+            if (_quiz) {
+                console.log(_quiz.data.data.questions);
+                if(_quiz.data.data.questions) {
+                    _quiz.data.data.questions.forEach(element => {
+                        console.log(element);
+                        this.questions.filter(obj => {
+                            console.log(obj.name);
+                            if(obj._id == element) {
+                                this.questions1.push(obj);
+                                this.questions.splice(obj,1);
+                            }
+                        });
+                    });
+                }                
+            }
+            
         });
     },
 
@@ -115,14 +135,25 @@ export default {
         },
 
         async sendForm() {
-        console.log(this.form);
         // TODO BURAYA QUIZ MODELİ İÇİNDEKİ QUESTİON KEY'İNE EKLEME YAPACAKSIN
-/*         this.$axios.post('/questions/add', this.form).then((result) => {
+        // Soruların sadece _id'lerini çekiyoruz.
+        const newObj = await this.questions1.map(obj => {
+            return obj._id;
+        });
+
+        const newObj1 = {
+            quiz_id: this.$route.params.id,
+            questions: newObj
+        }
+
+
+        console.log(newObj1);
+         this.$axios.post('/quizzes/addquestions', newObj1).then((result) => {
             console.log(result);
         })
         .catch((error) => {
             console.log(error);
-        }) */
+        })
         }
     }
 }

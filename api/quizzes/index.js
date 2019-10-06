@@ -62,10 +62,11 @@ app.delete('/quizzes/delete', async (req, res) => {
 
 app.get('/quizzes/:id', async (req, res) => {
     const _result = await Quiz.findById(req.params.id);
+    console.log(_result);
     if (_result) {
         res.status(200).send({
             status: true,
-            data: _result
+            data: _result,
         });            
     }
 });
@@ -85,6 +86,27 @@ app.post('/quizzes/edit', async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+});
+
+app.post('/quizzes/addquestions', async (req, res) => {
+    console.log(req.body);  
+
+    try {
+        const _ =await Quiz.updateOne({_id: req.body.quiz_id}, {questions: req.body.questions});
+        console.log(_);
+        if(_) {
+            res.status(200).send({
+                status: true,
+                message: _
+            });
+        }
+   } catch (error) {
+       res.status(400).send({
+           status: false,
+           message: error
+       })
+   }
+
 });
 
 module.exports = {

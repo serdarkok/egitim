@@ -12,7 +12,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="Ayarlar" width="180">
             <template slot-scope="scope">
-            <el-button type="text" @click="addQuestions(scope.row.id)" size="small">Soru Ekle</el-button>
+            <el-button type="text" @click="addQuestions(scope.row._id)" size="small">Soru Ekle</el-button>
             <el-button type="text" @click="editQuiz(scope.row._id)" size="small">Düzenle</el-button>
             <el-button type="text" @click="deleteClick(scope.row._id)" size="small">Sil</el-button>
             </template>
@@ -72,7 +72,7 @@ export default {
         },
 
         addQuestions(id) {
-            this.$router.push('/admin/quizzes/addquestion');
+            this.$router.push('/admin/quizzes/addquestion/'+id);
         }
     }
 }
