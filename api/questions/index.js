@@ -2,9 +2,35 @@ import Express from 'express';
 const app = new Express();
 import bodyParser from 'body-parser';
 import Question from '../../models/Questions';
+import fs from 'fs-extra';
+import multer from 'multer';
+import path from 'path';
+
+const tmp = path.resolve(__dirname, '../../tmp');
+const dest = path.resolve(__dirname, '../../uploads');
+var upload = multer({ dest: tmp});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.post('/questions/add/photo', upload.single('Photo'), async (req, res) => { 
+    const file = dest + '/'+ req.file.originalname;
+
+    fs.move(req.file.path, file, function(err) {
+        console.log(err);
+    });
+    
+    example(req.body.photo, dest);
+
+    async function example (src, dest) {
+        try {
+          await fs.move(srcpath, dstpath)
+          console.log('success!')
+        } catch (err) {
+          console.error(err)
+        }
+      }
+});
 
 app.post('/questions/add', async (req, res) => {
     
@@ -62,6 +88,14 @@ app.post('/questions/add', async (req, res) => {
 
 app.get('/questions', async (req, res) => {
     const _list = await Question.find({}).populate('c_id');
+    if (_list) {
+        res.status(200).send(_list);
+    }
+});
+
+// Quiz içerisinde soru eklerken kullanıyoruz
+app.get('/questionsforquiz', async (req, res) => {
+    const _list = await Question.find({}, '_id name c_id');
     if (_list) {
         res.status(200).send(_list);
     }

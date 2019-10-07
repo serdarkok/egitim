@@ -8,6 +8,22 @@
     ref="form"
     @submit.native.prevent="sendForm"
     >
+      <el-form-item label="Resim">
+      <el-upload
+        class="upload-demo"
+        action="/api/questions/add/photo"
+        :before-upload="beforeAvatarUpload"
+        ref="upload"
+        name="Photo"
+        :show-file-list="true"
+        :on-success="handleAvatarSuccess">
+        <el-button size="mini" type="primary" icon="el-icon-upload2" plain>bilgisayardan yükle</el-button>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">upload to server</el-button>
+        <div slot="tip" class="el-upload__tip">jpg/png/gif yüklenebilir</div>
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>        
+      </el-form-item>
       <el-form-item label="Soru" prop="name">
         <el-input
           type="textarea"
@@ -39,6 +55,7 @@
         <el-button type="warning" size="small" @click="mainPage" plain>İptal</el-button>
       </el-form-item>
     </el-form>
+    {{ form.fileList }}
   </div>
 </template>
 
@@ -49,10 +66,12 @@ export default {
   layout: "admin",
   data() {
     return {
+      imageUrl: '',
       labelPosition: "right",
       loading: "false",
       categories : '',
       form: {
+        file: '',
         name: '',
         c_id: '',
         choices: [
@@ -130,7 +149,28 @@ export default {
       .catch((error) => {
         console.log(error);
       })
-    }
+    },
+
+    submitUpload() {
+        this.$refs.upload.submit();
+    },
+
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('Avatar picture must be JPG format!');
+        }
+        if (!isLt2M) {
+          this.$message.error('Avatar picture size can not exceed 2MB!');
+        }
+        return isJPG && isLt2M;
+      }
+
   },
 
     async mounted() {
@@ -141,4 +181,27 @@ export default {
 </script>
 
 <style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

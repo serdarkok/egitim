@@ -10,9 +10,9 @@
             <el-tag v-else type="success" size="mini">Açık</el-tag>
             </template>
         </el-table-column>
-        <el-table-column fixed="right" label="Ayarlar" width="180">
+        <el-table-column fixed="right" label="Ayarlar" width="210">
             <template slot-scope="scope">
-            <el-button type="text" @click="addQuestions(scope.row._id)" size="small">Soru Ekle</el-button>
+            <el-button type="text" @click="addQuestions(scope.row._id)" size="small">Soru Ekle/Kaldır</el-button>
             <el-button type="text" @click="editQuiz(scope.row._id)" size="small">Düzenle</el-button>
             <el-button type="text" @click="deleteClick(scope.row._id)" size="small">Sil</el-button>
             </template>
