@@ -49,6 +49,14 @@ app.get('/quizzes', async (req, res) => {
     }
 });
 
+app.get('/quizzes/mainpage', async (req, res) => {
+    const _list = await Quiz.find({}).sort({'start.date': '1'});
+    if (_list) {
+        console.log(_list);
+        res.status(200).send(_list);
+    }
+});
+
 app.delete('/quizzes/delete', async (req, res) => {
     const _id = req.query.id;
     

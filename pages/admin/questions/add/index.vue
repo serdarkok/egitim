@@ -11,18 +11,19 @@
       <el-form-item label="Resim">
       <el-upload
         class="upload-demo"
+        list-type="picture-card"
         action="/api/questions/add/photo"
-        :before-upload="beforeAvatarUpload"
-        ref="upload"
-        name="Photo"
-        :show-file-list="true"
-        :on-success="handleAvatarSuccess">
-        <el-button size="mini" type="primary" icon="el-icon-upload2" plain>bilgisayardan yükle</el-button>
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">upload to server</el-button>
-        <div slot="tip" class="el-upload__tip">jpg/png/gif yüklenebilir</div>
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>        
+        :on-remove="photoRemove"
+        :on-success="photoSuccess"
+        name="photo"
+        :on-error="photoError"
+        :limit="1">
+        <i class="el-icon-plus"></i>
+        <div slot="tip" class="el-upload__tip">jpg/png/gif uzantılı resim yüklenebilir.</div>
+      </el-upload> 
+      <el-dialog v-model="dialogVisible" size="tiny">
+        <img width="100%" :src="dialogImageUrl" alt>
+      </el-dialog>
       </el-form-item>
       <el-form-item label="Soru" prop="name">
         <el-input
@@ -55,7 +56,6 @@
         <el-button type="warning" size="small" @click="mainPage" plain>İptal</el-button>
       </el-form-item>
     </el-form>
-    {{ form.fileList }}
   </div>
 </template>
 
@@ -66,12 +66,13 @@ export default {
   layout: "admin",
   data() {
     return {
-      imageUrl: '',
       labelPosition: "right",
       loading: "false",
       categories : '',
+      dialogImageUrl: '',
+      dialogVisible: false,
       form: {
-        file: '',
+        photo: '',
         name: '',
         c_id: '',
         choices: [
@@ -144,20 +145,19 @@ export default {
 
       console.log(this.form);
       this.$axios.post('/questions/add', this.form).then((result) => {
-        console.log(result);
+        if (result.status === 200) {
+            this.$message({
+              type: 'success',
+              message: 'Kayıt işlemi gerçekleşmiştir'
+            });
+            // redirect main page
+            this.mainPage();
+        }
       })
       .catch((error) => {
         console.log(error);
       })
     },
-
-    submitUpload() {
-        this.$refs.upload.submit();
-    },
-
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-      },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
@@ -169,7 +169,26 @@ export default {
           this.$message.error('Avatar picture size can not exceed 2MB!');
         }
         return isJPG && isLt2M;
-      }
+      },
+
+      photoRemove(file, fileList) {
+        this.$axios.delete('/questions/add/photo?photo='+this.form.photo);
+      },
+
+      photoPictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+
+      photoError(err, file) {
+        this.$alert("Yükleme sırasında hata oluştu. Aynı isimde dosya sunucuda mevcut olabilir, lütfen kontrol ediniz!", "Uyarı", {
+        confirmButtonText: "Anladım",
+        });
+      },    
+      
+      photoSuccess(res, file) {
+        this.form.photo = res.file;
+      },
 
   },
 
@@ -181,27 +200,15 @@ export default {
 </script>
 
 <style>
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+.el-upload--picture-card {
+  width: 100px;
+  height: 100px;
+  line-height: 110px;
+}
+
+.el-upload-list--picture-card .el-upload-list__item {
+    width: 100px;
+  height: 100px;
+  line-height: 96px;
+}
 </style>

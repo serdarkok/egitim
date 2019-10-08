@@ -8,6 +8,25 @@
     ref="form"
     @submit.native.prevent="sendForm"
     >
+      <el-form-item label="Resim">
+        <el-upload
+          class="upload-demo"
+          list-type="picture-card"
+          action="/api/questions/add/photo"
+          :on-remove="photoRemove"
+          :on-success="photoSuccess"
+          name="photo"
+          :show-file-list="true"
+          :on-error="photoError"
+          :file-list="uploaded_photo"
+          :limit="1">
+          <i class="el-icon-plus"></i>
+          <div slot="tip" class="el-upload__tip">jpg/png/gif uzantılı resim yüklenebilir.</div>
+        </el-upload> 
+         <el-dialog v-model="dialogVisible" size="tiny">
+          <img width="100%" :src="dialogImageUrl" alt>
+        </el-dialog>
+      </el-form-item>
       <el-form-item label="Soru">
         <el-input
           type="textarea"
@@ -50,9 +69,12 @@ export default {
     components: { Choice },
     data() {
         return {
+            dialogImageUrl: '',
+            dialogVisible: true,          
             labelPosition: "right",
             loading: "false",
             categories : '',
+            uploaded_photo: [],
             form: '',
             rules: {
               name: [
@@ -74,12 +96,19 @@ export default {
 
     async mounted() {
         const _id = this.$route.params.id
-        console.log(_id);
         if (_id) {
             const _result = await this.$axios.get('/questions/' + _id);
               if (_result) {
-                console.log(_result);
                 this.form = _result.data.data;
+                if (this.form.photo) {
+                  const _ = {
+                    name: this.form.photo,
+                    url: '/uploads/'+this.form.photo
+                  };
+                  
+                  this.uploaded_photo.push(_);
+                  this.dialogVisible = true;
+                }
               }
         }
       const _ = await this.$axios.get('/categories');
@@ -129,6 +158,7 @@ export default {
             if (!valid) {
             return;
         }
+        console.log(this.form);
         const _ = await this.$axios.post('/questions/edit', this.form);
         if (_.status === 200) {
           this.$message({
@@ -139,10 +169,52 @@ export default {
         this.mainPage();
         }
       },
+
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('Avatar picture must be JPG format!');
+        }
+        if (!isLt2M) {
+          this.$message.error('Avatar picture size can not exceed 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
+
+      photoRemove(file, fileList) {
+        this.form.photo = null;
+        this.$axios.delete('/questions/add/photo?photo='+this.form.photo);
+      },
+
+      photoPictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+
+      photoError(err, file) {
+        this.$alert("Yükleme sırasında hata oluştu. Aynı isimde dosya sunucuda mevcut olabilir, lütfen kontrol ediniz!", "Uyarı", {
+        confirmButtonText: "Anladım",
+        });
+      },    
+      
+      photoSuccess(res, file) {
+        this.form.photo = res.file;
+      },
     }
 }
 </script>
 
 <style>
+.el-upload--picture-card {
+  width: 100px;
+  height: 100px;
+  line-height: 110px;
+}
 
+.el-upload-list--picture-card .el-upload-list__item {
+  width: 100px;
+  height: 100px;
+}
 </style>

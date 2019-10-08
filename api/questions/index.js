@@ -7,27 +7,51 @@ import multer from 'multer';
 import path from 'path';
 
 const tmp = path.resolve(__dirname, '../../tmp');
-const dest = path.resolve(__dirname, '../../uploads');
+const dest = path.resolve(__dirname, '../../static/uploads');
 var upload = multer({ dest: tmp});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post('/questions/add/photo', upload.single('Photo'), async (req, res) => { 
-    const file = dest + '/'+ req.file.originalname;
-
-    fs.move(req.file.path, file, function(err) {
+app.post('/questions/add/photo', upload.single('photo'), async (req, res) => {
+    console.log(req.file);
+    const file = Date.now() + path.extname(req.file.originalname);
+    const filepath = dest + '/'+ Date.now() + path.extname(req.file.originalname);
+    console.log(file);
+/*     fs.move(req.file.path, file, function(err) {
         console.log(err);
-    });
+    }); */
     
-    example(req.body.photo, dest);
+    example(req.file.path, filepath);
 
     async function example (src, dest) {
         try {
-          await fs.move(srcpath, dstpath)
+          await fs.move(src, dest)
           console.log('success!')
+          res.status(200).send({
+              status: true,
+              file: file,
+          });
         } catch (err) {
-          console.error(err)
+            res.status(400).send(err);
+            console.error(err)
+        }
+      }
+});
+
+app.delete('/questions/add/photo', (req, res) => {
+    const _ = dest+'/'+req.query.photo;
+    // console.log(_);
+
+    remove(_);
+
+    async function remove(data) {
+        try {
+            console.log(data);
+          await fs.remove(data);
+          console.log('success!');
+        } catch (err) {
+          console.error(err);
         }
       }
 });

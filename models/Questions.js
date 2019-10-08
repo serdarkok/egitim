@@ -16,6 +16,9 @@ const questionsSchema = new Schema({
         type: Boolean,
     },
 
+    photo: {
+        type: String
+    },
 /*     choices: [{
         type: Schema.Types.ObjectId,
         ref: 'Choice'

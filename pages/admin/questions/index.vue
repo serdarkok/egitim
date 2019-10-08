@@ -28,7 +28,6 @@ export default {
     try {
       // Eğer axios'a context dışında import ederek ulaşırsan api kısayollarını kullanamazsın.
       const _lists = await context.$axios.get("/questions");
-      console.log(_lists.data);
       await context.store.commit("questions/SET_QUESTION", _lists.data);
       if (_lists) {
         return { tableData: context.store.getters["questions/allQuestions"] };
