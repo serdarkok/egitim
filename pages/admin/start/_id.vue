@@ -25,6 +25,7 @@ export default {
     layout: 'admin',
     data() {
         return {
+            quiz_id: null,
             time: 0,
             cloneTime: 0,
             showTime: false,
@@ -39,6 +40,7 @@ export default {
             const _ = await this.$axios.get('/quizzes/getStart/'+id);
             this.data = _.data;
             this.time = _.data.time;
+            this.quiz_id = id;
         });
     },
 
@@ -69,8 +71,7 @@ export default {
         },
 
         sendID(id) {
-            // customEmit(id);
-            this.$socket.emit('newQuestion', id);
+            this.$socket.emit('newQuestion', ({id: id, quiz_id: this.quiz_id}));
         },
 
     },

@@ -11,11 +11,11 @@ io.on('connection', socket => {
     });
 
     socket.on('newQuestion', (data) => {
-        socket.broadcast.to(data).emit('sendQuestion', data);
-
+        console.log(data);
+        // socket.broadcast.to(data.quiz_id).emit('sendQuestion', data.id);
+        socket.to(data.quiz_id).emit('sendQuestion', data.id);
         // socket.emit('sendQuestion', data);
         _id = data;
-        console.log(_id);
     });
 
     socket.on('joinRoom', (data) => {

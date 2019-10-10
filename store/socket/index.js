@@ -10,7 +10,6 @@ const actions = {
     },
 
     async SOCKET_sendQuestion ({ commit }, veri) {
-        console.log(veri);
         const _ = await this.$axios.get('/questions/'+veri);
         console.log(_);
         if (_) {

@@ -7,21 +7,12 @@
                 </div>
                 <div class="question-wrap">
                     <div class="question">
-                    Soru: Aşağıdakilerden hangisi kronik pankreatit tanısıyla izlenen bir hastada ekzokrin pankreas fonksiyonlarını değerlendirmek için kullanılan testlerden biri değildir?
+                    Soru: {{ questions }}
                     </div>
-                    <el-radio-group v-model="radio" fill="#007A2C" class="choices-wrap" size="medium">
-                        <el-row>
-                        <el-radio :label="3" border>Reseptör Agonis</el-radio>
-                        </el-row>
-                        <el-row>
-                        <el-radio :label="6" border>Trijinal Forteks</el-radio>
-                        </el-row>                        
-                        <el-row>
-                        <el-radio :label="8" border>Antiagulenler</el-radio>
-                        </el-row>
-                        <el-row>
-                        <el-radio :label="12" border>Psödo Agonistler</el-radio>
-                        </el-row>                        
+                    <el-radio-group v-model="radio" fill="#007A2C" class="choices-wrap" size="medium">                        
+                        <!-- <el-row v-for="(item, index) in todos.choices" :key="index">
+                            <el-radio :label="item.dummy_id" border>{{item.name}}</el-radio>
+                        </el-row> -->
                     </el-radio-group>
                 </div>
             </el-card>            
@@ -30,17 +21,48 @@
 </template>
 
 <script>
+// import io from 'socket.io-client'
+
 export default {
     data() {
         return {
+            questions: null,
             radio: null,
         }
     },
 
-    beforeMount() {
+    sockets: {
+        connect: function () {
+            console.log(this.$socket.id);
+        },
+        customEmit: function (data) {
+            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        }
+    },  
+
+    async beforeMount() {
         // console.log(this.$route.params.quiz);
-        this.$socket.emit('joinRoom', this.$route.params.quiz);
-    }
+        await this.$socket.emit('joinRoom', this.$route.params.quiz);
+        // this.questions = this.$store.getters['socket/allQuestion'];
+    },
+
+    // mounted() {
+    //     // this.socket = io();
+    //     console.log('mounted tetiklendi');
+    //     // this.socket.join(this.$route.params.quiz);
+    //     this.$socket.on('sendQuestion', function(result) {
+    //         console.log('tetiklendi');
+    //         this.questions = result;
+    //     });
+    // }
+
+
+    // computed: {
+    //     todos() {
+    //         return this.$socket.on('sendQuestion');
+    //     }
+    // }
+
 }
 </script>
 
