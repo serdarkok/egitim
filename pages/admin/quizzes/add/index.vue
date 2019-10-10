@@ -9,6 +9,11 @@
       <el-form-item label="Quiz Adı" prop="name">
           <el-input v-model="form.name" placeholder="İsim"></el-input>
       </el-form-item>
+      <el-form-item label="Takma Ad" prop="slug">
+          <el-input v-model="form.slug" placeholder="Takma Ad" @keypress.native="isAlfa">
+            <template slot="prepend">http://poly.me/</template>
+          </el-input>
+      </el-form-item>
       <el-form-item label="Süresi" prop="time">
           <el-input-number v-model="form.time" :min="0" :max="100" size="small" :step="5"></el-input-number>
       </el-form-item>
@@ -132,7 +137,12 @@ export default {
                 finish: {
                     date: [{required: true, validator: validatePass, trigger: "blur"}],
                     time: [{required: true, message: "Bitiş saati girmelisiniz"}]
-                }
+                },
+                slug : {
+                    required: true,
+                    message: "Takma ad girmelisiniz.",
+                    trigger: "blur"
+                },
 
             }
         }
@@ -144,6 +154,15 @@ export default {
     methods : {
     mainPage() {
       this.$router.push('/admin/quizzes');
+    },
+
+    // Sadece latin harfleri çalıştırır
+    isAlfa($event) {
+        // console.log($event.keyCode); //keyCodes değeri gösterir
+        let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+        if (keyCode > 31 && (keyCode < 65 || keyCode > 90) && (keyCode < 97 || keyCode > 122)) { // 46 is dot
+            $event.preventDefault();
+        }
     },
 
     async sendForm() {

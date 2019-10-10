@@ -35,7 +35,8 @@ module.exports = {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/vue-draggable',
-    '@/plugins/raw-view'
+    '@/plugins/raw-view',
+    {src: '@plugins/socket', ssr: false},
   ],
   /*
   ** Nuxt.js dev-modules
@@ -87,6 +88,4 @@ module.exports = {
     "~/api/questions/index.js",
     "~/api/quizzes/index.js"
   ]
-
-
 }

@@ -16,7 +16,7 @@
           <ul class="item-select">
               <li v-for="(item, index) in questions" :key="index" v-if="item.c_id == selected_category || selected_category == ''">
                     <el-row type="flex" align="middle">
-                        <el-col :span="22">{{ item.name }} {{ item._id }}</el-col>
+                        <el-col :span="22">{{ item.name }}</el-col>
                         <el-col :span="2"><el-button size="mini" type="success" @click="addQuestion(item)" icon="el-icon-arrow-right" plain></el-button></el-col>
                     </el-row>
               </li>
@@ -43,7 +43,7 @@
               <li v-for="(item, index) in questions1" :key="index" :body-style="{ cursor: 'move' }">
                     <el-row type="flex" align="middle">
                         <el-col :span="3"><el-button size="mini" type="danger" icon="el-icon-arrow-left" @click="removeQuestion(item)" plain></el-button></el-col>
-                        <el-col :span="21">{{ item.name }} {{ item._id }}</el-col>
+                        <el-col :span="21">{{ item.name }}</el-col>
                     </el-row>
               </li>
         </draggable>
@@ -166,7 +166,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .bgcolor {
     background-color: #e3e3e3;
 }

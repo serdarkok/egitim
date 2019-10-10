@@ -10,7 +10,8 @@
               </span>
               <h3 class="cover-h3">{{ index + 1 }}</h3>
               <el-button style="float: right;" type="warning" size="mini" plain>İstatistikler</el-button>
-              <el-button style="float: right;" type="primary" size="mini" class="mr-2" plain>Başlat</el-button>
+              <el-button style="float: right;" type="primary" @click="startQuiz(item._id)" size="mini" class="mr-2" plain>Başlat</el-button>
+              <el-tag style="float: right;" type="info" size="mini" class="mt-1"><a :href="'http://test.me/'+item.slug" target="_blank">http://test.me/{{item.slug}}</a></el-tag>
           </div>
           <div>
             <ul class="item-select">
@@ -35,7 +36,17 @@ export default {
   layout: "admin",
   // middleware: "auth",
 
-  data() {
+  sockets: {
+    connect: function () {
+      console.log('socket connected');
+      
+       },
+       customEmit: function (data) {
+           console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)');
+       }
+  },  
+
+data() {
     return {
       quizzes: null,
     }
@@ -45,6 +56,9 @@ export default {
     changeDate(data) {
       return this.$moment(data).format("DD MMMM YYYY HH:SS");
     },
+    startQuiz(data) {
+      this.$router.push('/admin/start/'+data);
+    }
   },
 
   async mounted() {
@@ -59,6 +73,10 @@ export default {
 </script>
 
 <style>
+a {
+  color: #909399;
+  text-decoration: none;
+}
 .item-select {
     list-style: none;
     padding-left: 0px;

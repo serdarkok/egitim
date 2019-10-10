@@ -4,6 +4,7 @@ import user from './user';
 import categories from './categories';
 import questions from './questions';
 import quizzes from './quizzes';
+import socket from './socket';
 
 const createStore = () => {
     return new vuex.Store({
@@ -13,6 +14,7 @@ const createStore = () => {
             categories: categories,
             questions: questions,
             quizzes: quizzes,
+            socket: socket,
         },
 
         actions : {

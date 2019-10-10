@@ -44,7 +44,6 @@ app.post('/quizzes/add', async (req, res) => {
 app.get('/quizzes', async (req, res) => {
     const _list = await Quiz.find({});
     if (_list) {
-        console.log(_list);
         res.status(200).send(_list);
     }
 });
@@ -52,7 +51,6 @@ app.get('/quizzes', async (req, res) => {
 app.get('/quizzes/mainpage', async (req, res) => {
     const _list = await Quiz.find({}).sort({'start.date': '1'});
     if (_list) {
-        console.log(_list);
         res.status(200).send(_list);
     }
 });
@@ -70,12 +68,19 @@ app.delete('/quizzes/delete', async (req, res) => {
 
 app.get('/quizzes/:id', async (req, res) => {
     const _result = await Quiz.findById(req.params.id);
-    console.log(_result);
     if (_result) {
         res.status(200).send({
             status: true,
             data: _result,
         });            
+    }
+});
+
+app.get('/quizzes/getStart/:id', async (req, res) => {
+    const _result = await Quiz.findById(req.params.id).populate('questions');
+    console.log(_result);
+    if (_result) {
+        res.status(200).send(_result);
     }
 });
 
