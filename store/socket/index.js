@@ -3,17 +3,21 @@ const state = {
 }
 
 const actions = {
-
-    SOCKET_newMessage({ commit }, data) {
-        console.log('gerekli belgeler:', data);
-        console.log('Message recieved', data);
-    },
-
-    async SOCKET_sendQuestion ({ commit }, veri) {
-        const _ = await this.$axios.get('/questions/'+veri);
-        console.log(_);
-        if (_) {
-            commit('SET_QUESTION', _.data.data);
+    async SOCKET_sendQuestion ({ commit }, data) {
+        switch(data.action) {
+            case 'start':
+                const _ = await this.$axios.get('/questions/'+data.id);
+                if (_) {
+                    commit('SET_QUESTION', _.data.data);
+                }
+                break;
+            
+            case 'stop':
+                commit('REMOVE_QUESTION');
+                break;
+            
+            case 'answer':
+                break;
         }
     }
 }
@@ -21,6 +25,10 @@ const actions = {
 const mutations = {
     SET_QUESTION(state, data) {
         state.question = data;
+    },
+
+    REMOVE_QUESTION(state, data) {
+        state.question = null;
     }
  }
 

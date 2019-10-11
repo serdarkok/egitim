@@ -11,5 +11,5 @@ export default function({store}) {
             mutationPrefix: 'SOCKET_'
         },
         // options: { path: "/my-app/" } //Optional options
-    }))
+    }));
 }

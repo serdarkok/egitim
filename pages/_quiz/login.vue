@@ -41,12 +41,17 @@ export default {
     return {
       model: {
         username: "",
+        password: ""
       },
       loading: false,
       rules: {
         username: [
           { required: true, message: "Kullanıcı adı alanı gereklidir", trigger: "blur" },
           { min: 4, message: "Kullanıcı adı 5 karakterden kısa olmamalıdır", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "Şifre alanı gereklidir", trigger: "blur" },
+          { min: 5, message: "Şifre 5 karakterden kısa olmamalıdır", trigger: "blur" }
         ]
       }
     };

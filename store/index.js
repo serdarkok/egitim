@@ -18,7 +18,7 @@ const createStore = () => {
         },
 
         actions : {
-            async nuxtServerInit({ dispatch }, { req }){
+/*             async nuxtServerInit({ dispatch }, { req }){
                 // process.server?console.log('Nuxtserverinit Server Tarafı'):console.log('Nuxtserverinit Client Tarafı');
 
                 let {user} = '';
@@ -30,7 +30,7 @@ const createStore = () => {
                     }
                 }
                 // await dispatch('auth/verifyToken', user);
-            }
+            } */
         }
         
     });
