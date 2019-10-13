@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import Choice from '@/components/questions/Choice';
+import Choice from '@/components/admin/questions/Choice';
 
 export default {
   layout: "admin",

@@ -77,7 +77,7 @@ app.get('/quizzes/:id', async (req, res) => {
 });
 
 app.get('/quizzes/getStart/:id', async (req, res) => {
-    const _result = await Quiz.findById(req.params.id).populate('questions');
+    const _result = await Quiz.findOne({slug: req.params.id}).populate('questions');
     if (_result) {
         res.status(200).send(_result);
     }

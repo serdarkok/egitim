@@ -10,7 +10,7 @@
               </span>
               <h3 class="cover-h3">{{ index + 1 }}</h3>
               <el-button style="float: right;" type="warning" size="mini" plain>İstatistikler</el-button>
-              <el-button style="float: right;" type="primary" @click="startQuiz(item._id)" size="mini" class="mr-2" plain>Başlat</el-button>
+              <el-button style="float: right;" type="primary" @click="startQuiz(item.slug)" size="mini" class="mr-2" plain>Başlat</el-button>
               <el-tag style="float: right;" type="info" size="mini" class="mt-1"><a :href="'http://test.me/'+item.slug" target="_blank">http://test.me/{{item.slug}}</a></el-tag>
           </div>
           <div>

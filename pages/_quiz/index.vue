@@ -4,13 +4,13 @@
       <h2>Giriş Ekranı</h2>
       <el-form
         class="login-form"
-        :model="model"
         :rules="rules"
+        :model="model"
         ref="form"
-        @submit.native.prevent="login"
+        @submit.native.prevent="getLogin"
       >
-        <el-form-item prop="username">
-          <el-input v-model="model.username" placeholder="İsim ve Soyisim">
+        <el-form-item prop="name">
+          <el-input v-model="model.name" placeholder="İsim ve Soyisim">
             <span slot="prepend">
               <i class="el-icon-user"></i>
             </span>
@@ -32,58 +32,51 @@
 </template>
 
 <script>
-import axios from "@nuxtjs/axios";
-
 export default {
+  // socket: {
+  //   connect: function() {
+  //     console.log('connection');
+  //   }
+  // },
+
   layout: "login",
   name: "login",
   data() {
     return {
-      model: {
-        username: "",
+      model : {
+        name: null,
+        socket_id: null,
       },
       loading: false,
       rules: {
-        username: [
-          { required: true, message: "Kullanıcı adı alanı gereklidir", trigger: "blur" },
-          { min: 4, message: "Kullanıcı adı 5 karakterden kısa olmamalıdır", trigger: "blur" }
+        name: [
+          { required: true, message: "İsim Soyisim alanı gereklidir", trigger: "blur" },
+          { min: 4, message: "İsim Soyisim alanı 5 karakterden kısa olmamalıdır", trigger: "blur" }
         ]
       }
     };
   },
   methods: {
-    getLogin(data) {
-      this.loading = true;
-      // store/auth/index.js çağırılıyor
-      this.$store.dispatch("auth/postLogin", data)
-        .then(() => {
-          const _auth = this.$store.state.auth.user;
-          if (_auth.auth) {
-            this.$message.success("Giriş başarılı...");
-            window.location.href = "/admin";
-          } else { this.$message.error("Username or password is invalid"); }
-        })
-        .catch(err => { console.log(err); });
-      this.loading = false;
-    },
-    async login() {
-      let valid = await this.$refs.form.validate();
-      if (!valid) {
-        return;
+    async getLogin() {
+      try {
+        // console.log(this.$route.params.quiz);
+        // const _ = await this.$axios.post('/guests/add', this.model);
+        // console.log(_);
+        this.$router.push(this.$route.params.quiz + '/question');
       }
-      this.loading = true;
-      await this.getLogin(this.model);
-      this.loading = false;
-      /*       if (
-        this.model.username === this.validCredentials.username &&
-        this.model.password === this.validCredentials.password
-      ) {
-        this.$message.success("Login successfull");
-      } else {
-        this.$message.error("Username or password is invalid");
-      } */
+      catch (error) {
+        console.log(error);
+      }
     }
-  }
+  },
+
+  mounted() {
+    this.$socket.on('connect', (socket) => {
+        console.log(this.$socket.id);
+        this.model.socket_id = this.$socket.id;
+    });
+  },
+
 };
 </script>
 

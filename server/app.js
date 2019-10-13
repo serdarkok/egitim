@@ -4,6 +4,7 @@ const io = require('socket.io')(server);
 
 io.on('connection', socket => {
     console.log('Socket Bağlandı');
+    console.log(socket.id);
 
     socket.on('newQuestion', (data) => {
         socket.to(data.quiz_id).emit('sendQuestion', data);
