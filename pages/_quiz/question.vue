@@ -2,7 +2,7 @@
     <el-row>
         <el-col :sm="{span: 20, offset: 2}" :md="{span: 12, offset: 6}"  :lg="{span: 12, offset: 6}" :xs="{span: 22, offset: 1}" >
             <div class="question-wrap" v-loading="loading">
-            <Question :q="this.q" v-if="q"></Question>
+            <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
             <div class="wait-wrap" v-else>
                 <div id="loader">
                     <div id="top"></div>
@@ -27,6 +27,11 @@ export default {
         return {
             q: null,
             loading: false,
+            answer: {
+                radio: null,
+                question_id: null,
+                quiz_slug: this.$route.params.quiz,
+            }
         }
     },
 
@@ -52,6 +57,14 @@ export default {
                 this.q = data;
             }, 650);
         }
+    },
+
+    methods: {
+        getRadio(data) {
+            this.answer.question_id = data.question_id;
+            this.answer.radio = data.radio;
+            console.log(this.answer);
+        }
     }
 
 }
@@ -61,7 +74,6 @@ export default {
     .question-wrap {
         min-height: 300px;
         background-color: #FFFFFF;
-        border: 1px solid #DFDFDF;
         border-radius: 12px;
         margin-top: 20px;
         display: flex;
