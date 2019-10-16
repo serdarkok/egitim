@@ -87,6 +87,7 @@ module.exports = {
     "~/api/categories/index.js",
     "~/api/questions/index.js",
     "~/api/quizzes/index.js",
-    "~/api/guests/index.js"
+    "~/api/guests/index.js",
+    "~/api/answers/index.js"
   ]
 }

@@ -1,23 +1,34 @@
 const state = {
     question: '',
+    result: '',
 }
 
 const actions = {
     async SOCKET_sendQuestion ({ commit }, data) {
         switch(data.action) {
-            case 'start':
+            case 'q_start':
                 const _ = await this.$axios.get('/questions/'+data.id);
                 if (_) {
                     commit('SET_QUESTION', _.data.data);
                 }
                 break;
             
-            case 'stop':
+            case 'q_stop':
                 commit('REMOVE_QUESTION');
                 break;
             
-            case 'answer':
+            case 'a_start':
+                const result = await this.$axios.get('/answer/'+data.id);
+                if (result) {
+                    commit('REMOVE_QUESTION');
+                    commit('SET_ANSWER', result);
+                }
                 break;
+
+            case 'a_stop':
+                    commit('REMOVE_QUESTION');
+                    commit('REMOVE_ANSWER');
+                break;                
         }
     }
 }
@@ -29,6 +40,14 @@ const mutations = {
 
     REMOVE_QUESTION(state, data) {
         state.question = null;
+    },
+
+    SET_ANSWER(state, data) {
+        state.result = data;
+    },
+
+    REMOVE_ANSWER(state, date) {
+        state.result = null;
     }
  }
 

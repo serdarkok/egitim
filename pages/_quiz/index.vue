@@ -3,6 +3,7 @@
         <el-col :sm="{span: 20, offset: 2}" :md="{span: 12, offset: 6}"  :lg="{span: 12, offset: 6}" :xs="{span: 22, offset: 1}" >
             <div class="question-wrap" v-loading="loading">
             <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
+            <Result v-else-if="a" :result="a"></Result>
             <div class="wait-wrap" v-else>
                 <div id="loader">
                     <div id="top"></div>
@@ -20,21 +21,24 @@
 // import io from 'socket.io-client'
 import {mapState} from 'vuex';
 import Question from '@/components/frontend/question';
+import Result from '@/components/frontend/result';
 import Cookie from 'js-cookie';
 
 export default {
-    components: {Question},
+    components: {Question, Result},
     middleware: 'controlLogin',
     data() {
         return {
             q: null,
+            a: null,
             loading: false,
-            waitText: 'lütfen soru için <br/> bekleyiniz',
+            waitText: 'lütfen <br/> bekleyiniz',
             answer: {
+                user_id: null,
                 radio: null,
                 question_id: null,
                 quiz_slug: this.$route.params.quiz,
-            }
+            },
         }
     },
 
@@ -50,7 +54,7 @@ export default {
         // this.questions = this.$store.getters['socket/allQuestion'];
     },
 
-    computed: mapState('socket', ['question']),
+    computed: mapState('socket', ['question', 'result']),
 
     watch: {
         question(data) {
@@ -62,6 +66,20 @@ export default {
             }, 650);
           } else {
             this.waitText = `oturumunuz sonlanmış <br/> <a href="./login" type="warning">lütfen tekrar giriş yapınız</a>`;
+            this.q = null;
+          }
+        },
+
+        result(data) {
+          if (Cookie.get('user_id')) {
+            this.loading = true;
+            setTimeout(() => {
+                this.loading = !this.loading;
+                this.a = data;
+            }, 650);
+          } else {
+            this.waitText = `oturumunuz sonlanmış <br/> <a href="./login" type="warning">lütfen tekrar giriş yapınız</a>`;
+            this.a = null;
           }
         }
     },
@@ -70,10 +88,18 @@ export default {
         getRadio(data) {
             this.answer.question_id = data.question_id;
             this.answer.radio = data.radio;
-            console.log(this.answer);
+            this.answer.user_id = Cookie.get('user_id');
+            this.answer.quiz_slug = this.$route.params.quiz;
+            this.$axios.post('/answers/add', this.answer).then((data) => {
+                if (data.status) {
+                    this.$message({
+                        type: 'success',
+                        message: 'Cevabınızı kayıt edilmiştir.'
+                    });
+                }
+            });
         }
     }
-
 }
 </script>
 

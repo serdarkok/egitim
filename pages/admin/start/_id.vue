@@ -7,9 +7,10 @@
             <el-table-column fixed prop="name" label="Soru"></el-table-column>
             <el-table-column fixed="right" label="Ayarlar" width="260">
               <template slot-scope="scope">
-                <el-button type="danger" v-if="showTime == scope.row._id" @click="setQuestion(scope.row._id, 'stop')" size="mini" plain >Yayında {{cloneTime}}</el-button>
-                <el-button type="success" v-else :disabled="snozeTime" @click="setQuestion(scope.row._id, 'start')" size="mini" plain >Yayınla</el-button>
-                <el-button type="warning" size="mini" @click="setQuestion(scope.row._id, 'answer')" plain>Cevabı Göster</el-button>
+                <el-button type="danger" v-if="showTime == scope.row._id" @click="setQuestion(scope.row._id, 'q_stop')" size="mini" plain >Yayında {{cloneTime}}</el-button>
+                <el-button type="success" v-else :disabled="snozeTime" @click="setQuestion(scope.row._id, 'q_start')" size="mini" plain >Yayınla</el-button>
+                <el-button type="warning" size="mini" v-if="showAnswer == scope.row._id" @click="setQuestion(scope.row._id, 'a_stop')" plain>Cevabı Gizle</el-button>
+                <el-button type="warning" size="mini" v-else @click="setQuestion(scope.row._id, 'a_start')" plain>Cevabı Göster</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -30,7 +31,8 @@ export default {
       cloneTime: 0,
       showTime: false,
       snozeTime: false,
-      data: null
+      showAnswer: false,
+      data: null,
     };
   },
 
@@ -47,7 +49,7 @@ export default {
   methods: {
     setQuestion(data, action) {
         switch (action) {
-            case 'start':
+            case 'q_start':
                 this.sendID(data, action);
                 this.cloneTime = this.data.time;
                 this.showTime = data;
@@ -62,14 +64,30 @@ export default {
                 }, 1000);                
                 break;
             
-            case 'stop':
+            case 'q_stop':
                 clearInterval(hello);
                 this.showTime = false;
                 this.time = this.data.time;
                 this.snozeTime = false;
                 this.sendID(data, action);
                 break;
-        
+
+            case 'a_start':
+                clearInterval(hello);
+                this.showAnswer = data;
+                console.log(this.showAnswer);
+                this.sendID(data, action);
+                break;
+
+            case 'a_stop':
+                clearInterval(hello);
+                this.showTime = false;
+                this.showAnswer = false;
+                this.time = this.data.time;
+                this.snozeTime = false;
+                this.sendID(data, action);
+                break;
+
             default:
                 break;
         }

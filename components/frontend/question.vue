@@ -5,15 +5,12 @@
     </div>
     <div class="question-wrap" v-if="q">
         <div class="question">
+        <img :src="q.photo" v-if="q.photo" />
+        <el-row>
+            <el-image style="width: 200px; height: 100px" :src="getPhoto(q.photo)" v-if="q.photo" fit="scale-down"></el-image>
+        </el-row>
         {{ q.name }}
-        {{ q._id }}
         </div>
-<!--         <ul class="choices-wrap">
-            <li v-for="(item, index) in q.choices" :key="index" @click="selectChoice(index, $event.target)" v-bind:class="{ifSelect: ifSelect}">
-                {{item.name}}
-            </li>
-        </ul> -->
-
         <div class="choice-wrap">
             <table class="choice-wrap">
                 <label v-for="(item, index) in q.choices" :key="index" style="display: block;">
@@ -23,7 +20,6 @@
                     </tr>
                 </label>
             </table>
-            {{ radio }}
         </div>
     </div>
 </el-card>
@@ -65,6 +61,10 @@ export default {
             }
             this.$emit('getRadio', total);
             // this.$emit('addChoice', {data: i});
+        },
+
+        getPhoto(photo) {
+            return '/uploads/' + photo;
         }
     }
 }

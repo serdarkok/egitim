@@ -2,6 +2,7 @@
   <div class="login">
     <el-card>
       <h2>Giriş Ekranı</h2>
+      <h5 style="text-align: center;">Lütfen isim soyisim yazarak giriş yapınız</h5>
       <el-form
         class="login-form"
         :rules="rules"
@@ -62,10 +63,14 @@ export default {
   methods: {
     async getLogin() {
       try {
+      const valid = await this.$refs.form.validate();
+        if (!valid) {
+          return;
+      }
         console.log(this.$route.params.quiz);
         const _ = await this.$axios.post('/guests/add', this.model);
         console.log(_);
-        Cookie.set('user_id', _.data.message._id, { expires: 0.001 });
+        Cookie.set('user_id', _.data.message._id, { expires: 0.1 });
         this.$router.push('./');
       }
       catch (error) {

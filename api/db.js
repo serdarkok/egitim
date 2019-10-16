@@ -2,6 +2,8 @@ import Mongoose from 'mongoose';
 
         Mongoose.connect('mongodb://localhost:27017/egitim', {useNewUrlParser: true});
 
+        Mongoose.set('useFindAndModify', true);
+
         Mongoose.connection.on('error', err => {
             console.log('Mongoose Failed');
         });
