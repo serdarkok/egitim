@@ -1,32 +1,40 @@
 <template>
 <el-card :body-style="{ padding: '0px' }" shadow="hover">
     <div slot="header">
-        <span>Soru Ekranı</span>
+        <el-row type="flex" justify="space-around" align="middle">
+            <el-col :span="21">
+                <span style="font-weight: 700; padding-left: 10px;">SORU:</span>
+            </el-col>
+            <el-col :span="3">
+                <countdown :count="count"></countdown>
+            </el-col>
+        </el-row>
     </div>
     <div class="question-wrap" v-if="q">
         <div class="question">
-        <img :src="q.photo" v-if="q.photo" />
-        <el-row>
-            <el-image style="width: 200px; height: 100px" :src="getPhoto(q.photo)" v-if="q.photo" fit="scale-down"></el-image>
-        </el-row>
-        {{ q.name }}
+            <img :src="q.photo" v-if="q.photo" />
+            <el-row>
+                <el-image style="width: 200px; height: 100px" :src="getPhoto(q.photo)" v-if="q.photo" fit="scale-down"></el-image>
+            </el-row>
+            {{ q.name }}
         </div>
-        <div class="choice-wrap">
-            <table class="choice-wrap">
-                <label v-for="(item, index) in q.choices" :key="index" style="display: block;">
-                    <tr>
-                        <td style="vertical-align: top;"><input type="radio" v-model="radio" @click="sendRadio(item.dummy_id)" :value="item.dummy_id" class="option-input radio" name="example" /></td>
-                        <td><span>{{item.name}}</span></td>
-                    </tr>
-                </label>
-            </table>
-        </div>
+        <table class="choice-wrap">
+            <label v-for="(item, index) in q.choices" :key="index" style="display: block;">
+                <tr>
+                    <td style="vertical-align: top;"><input type="radio" v-model="radio" @click="sendRadio(item.dummy_id)" :value="item.dummy_id" class="option-input radio" name="example" /></td>
+                    <td><span>{{item.name}}</span></td>
+                </tr>
+            </label>
+        </table>
     </div>
 </el-card>
 </template>
 
 <script>
+import countdown from './countdown';
+
 export default {
+    components: {countdown},
     props: {
         q: {
             type: Object,
@@ -38,6 +46,7 @@ export default {
             radio: null,
             question_id: this.q._id,
             ifSelect: false,
+            count: this.$cookies.get('time'),
         }
     },
 
@@ -70,7 +79,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+
+.el-card__header {
+    padding: 5px 10px;
+}
+
 .question-wrap {
     padding: 10px;
     font-size: 15px;

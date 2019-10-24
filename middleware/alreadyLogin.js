@@ -16,9 +16,7 @@ const alreadyLogin = function(context) {
         } else {
             return context.redirect('./');
         }
-
     }
-
 }
 
 

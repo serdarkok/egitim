@@ -1,7 +1,7 @@
-const state = {
+const state = () => ({
     question: '',
     result: '',
-}
+});
 
 const actions = {
     async SOCKET_sendQuestion ({ commit }, data) {

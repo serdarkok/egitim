@@ -2,7 +2,6 @@ const Cookie = require('js-cookie');
 let user_id = null;
 
 const controlLogin = function(context) {
-
     if (!process.server) {
         user_id = Cookie.get('user_id');
         if (!user_id) {
@@ -10,7 +9,6 @@ const controlLogin = function(context) {
         }        
     } else
     {
-        console.log();
         const url = context.req.headers.host + '/' + context.params.quiz;
         user_id = context.app.$cookies.get('user_id');
         if (!user_id) {

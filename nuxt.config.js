@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser');
+const env = require('dotenv').config();
 
 module.exports = {
   mode: 'universal',
@@ -24,6 +25,13 @@ module.exports = {
   /*
   ** Global CSS
   */
+
+ server: {
+  // nuxt.js server options ( can be overrided by environment variables )
+  port: process.env.PORT,
+  host: process.env.BASE_URL,
+ },
+
   css: [
     'bootstrap-scss',
     'element-ui/lib/theme-chalk/index.css',
@@ -58,13 +66,15 @@ module.exports = {
   ],
   env: {
       API_KEY: 'Buradasifre-yer-alacak',
+      BASE_URL: process.env.BASE_URL,
+      PORT: process.env.PORT
   },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL : 'http://localhost:3000/api'
+    baseURL : 'http://'+process.env.BASE_URL+':'+process.env.PORT+'/api'
   },
   /*
   ** Build configuration

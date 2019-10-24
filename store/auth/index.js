@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 
-const state = {
+const state =  () => ({
     user : {
         auth : null,
     },
@@ -8,7 +8,7 @@ const state = {
         status: false,
         message: null,
     },
-}
+});
 
 const actions = {
     async postLogin({ commit }, data) {

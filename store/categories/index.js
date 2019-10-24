@@ -1,6 +1,6 @@
-const state = {
+const state =  () => ({
     categories : []
-}
+});
 
 const actions = {
     async addCategory({ commit }, data) {

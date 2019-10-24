@@ -3,7 +3,7 @@
         <el-col :sm="{span: 20, offset: 2}" :md="{span: 12, offset: 6}"  :lg="{span: 12, offset: 6}" :xs="{span: 22, offset: 1}" >
             <div class="question-wrap" v-loading="loading">
             <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
-            <Result v-else-if="a" :result="a"></Result>
+            <Result v-else-if="a" :result="a" :userAnswer="answer.radio"></Result>
             <div class="wait-wrap" v-else>
                 <div id="loader">
                     <div id="top"></div>
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-// import io from 'socket.io-client'
 import {mapState} from 'vuex';
 import Question from '@/components/frontend/question';
 import Result from '@/components/frontend/result';
@@ -26,14 +25,15 @@ import Cookie from 'js-cookie';
 
 export default {
     components: {Question, Result},
-    middleware: 'controlLogin',
+    middleware: [ 'controlLogin', 'isthereevent'],
+    // middleware: 'isthereevent',
     data() {
-        return {
-            q: null,
-            a: null,
+        return {        
+            q: null, // questions
+            a: null, // answers
             loading: false,
             waitText: 'lütfen <br/> bekleyiniz',
-            answer: {
+            answer: { // kullanıcı cevap verdiğinde doldurulacak property
                 user_id: null,
                 radio: null,
                 question_id: null,
@@ -46,10 +46,14 @@ export default {
         connect: function () {
             console.log(this.$socket.id);
         }
-    },  
+    },
+
+    async beforeCreate() {
+        // console.log(this.$route.params.quiz);
+    },
 
     async beforeMount() {
-        console.log(this.$route.params.quiz);
+        // console.log(this.$route.params.quiz);
         await this.$socket.emit('joinRoom', this.$route.params.quiz);
         // this.questions = this.$store.getters['socket/allQuestion'];
     },
@@ -61,9 +65,9 @@ export default {
           if (Cookie.get('user_id')) {
             this.loading = true;
             setTimeout(() => {
-                this.loading = !this.loading;
+                this.loading = false;
                 this.q = data;
-            }, 650);
+            }, 500);
           } else {
             this.waitText = `oturumunuz sonlanmış <br/> <a href="./login" type="warning">lütfen tekrar giriş yapınız</a>`;
             this.q = null;
@@ -74,7 +78,7 @@ export default {
           if (Cookie.get('user_id')) {
             this.loading = true;
             setTimeout(() => {
-                this.loading = !this.loading;
+                this.loading = false;
                 this.a = data;
             }, 650);
           } else {

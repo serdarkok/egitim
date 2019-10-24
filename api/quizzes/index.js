@@ -72,7 +72,21 @@ app.get('/quizzes/:id', async (req, res) => {
         res.status(200).send({
             status: true,
             data: _result,
-        });            
+        });
+    }
+});
+
+app.get('/quizzes/getQuizBySlug/:quiz', async (req, res) => {
+    const _result = await Quiz.findOne({slug: req.params.quiz});
+    if (_result) {
+        res.status(200).send({
+            status: true,
+            data: _result,
+        });
+    } else {
+        res.status(200).send({
+            status: false,
+        });
     }
 });
 

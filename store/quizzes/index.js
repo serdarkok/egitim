@@ -1,7 +1,7 @@
-const state = {
+const state =  () => ({
     quizzes: [],
     questions: [],
-}
+});
 
 const actions = {
 

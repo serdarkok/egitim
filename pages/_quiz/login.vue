@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <el-card>
+      <!-- <QrCode :value="getUrl" :size="300"></QrCode> -->
       <h2>Giriş Ekranı</h2>
       <h5 style="text-align: center;">Lütfen isim soyisim yazarak giriş yapınız</h5>
       <el-form
@@ -34,19 +35,20 @@
 
 <script>
 import Cookie from 'js-cookie';
+import QrCode from '@/components/frontend/qrcode';
+
+if (process.browser) {
+  var url = window.location.href;
+}
 
 export default {
-  // socket: {
-  //   connect: function() {
-  //     console.log('connection');
-  //   }
-  // },
-
   layout: "login",
   middleware: 'alreadyLogin',
+  components: {QrCode},
   name: "login",
   data() {
     return {
+      getUrl: url,
       model : {
         name: null,
         socket_id: null,
@@ -93,6 +95,6 @@ export default {
 <style>
 body {
   background: url("~assets/images/bg-background.png");
-  background-size: cover;
+  background-size: auto;
 }
 </style>

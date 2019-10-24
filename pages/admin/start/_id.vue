@@ -74,8 +74,8 @@ export default {
 
             case 'a_start':
                 clearInterval(hello);
+                this.showTime = false;                
                 this.showAnswer = data;
-                console.log(this.showAnswer);
                 this.sendID(data, action);
                 break;
 

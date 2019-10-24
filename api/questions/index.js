@@ -131,7 +131,7 @@ app.get('/questions/:id', async (req, res) => {
         res.status(200).send({
             status: true,
             data: _result
-        });            
+        });
     }
 });
 

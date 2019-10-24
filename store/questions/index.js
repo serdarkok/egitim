@@ -1,6 +1,6 @@
-const state = {
+const state =  () => ({
     questions : [],
-}
+});
 
 const actions = {
 
