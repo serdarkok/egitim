@@ -1,6 +1,12 @@
 # Egitim
 
-> My laudable Nuxt.js project
+> This app created by Nuxt.js. 
+
+I use:
+
+websocket
+mongo
+
 
 ## Build Setup
 
