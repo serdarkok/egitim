@@ -15,6 +15,9 @@ You can create quiz of event, question, user. If you started any event, it will 
 
 ![login screen](https://i.hizliresim.com/odD6Do.png)
 
+Question screen: Client give answer to question.
+![question screen](https://i.hizliresim.com/7B0ylv.png)
+
 Clients enter to that url, system want to some information then client waits any question. All client took same question, client can answer the question.
 
 
