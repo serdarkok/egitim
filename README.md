@@ -13,6 +13,8 @@ You can create quiz of event, question, user. If you started any event, it will 
 
 > For example: www.domain.com/254fe
 
+(https://i.hizliresim.com/odD6Do.png)
+
 Clients enter to that url, system want to some information then client waits any question. All client took same question, client can answer the question.
 
 
