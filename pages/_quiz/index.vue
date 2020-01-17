@@ -5,11 +5,7 @@
             <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
             <Result v-else-if="a" :result="a" :userAnswer="answer.radio"></Result>
             <div class="wait-wrap" v-else>
-                <div id="loader">
-                    <div id="top"></div>
-                    <div id="bottom"></div>
-                    <div id="line"></div>
-                </div>
+            <div class="nb-spinner"></div>
                 <div class="please-wait" v-html="waitText"></div>
             </div>
             </div>
@@ -32,7 +28,7 @@ export default {
             q: null, // questions
             a: null, // answers
             loading: false,
-            waitText: 'lütfen <br/> bekleyiniz',
+            waitText: 'lütfen bekleyiniz, sorular karşınıza otomatik gelecektir',
             answer: { // kullanıcı cevap verdiğinde doldurulacak property
                 user_id: null,
                 radio: null,
@@ -94,12 +90,14 @@ export default {
             this.answer.radio = data.radio;
             this.answer.user_id = Cookie.get('user_id');
             this.answer.quiz_slug = this.$route.params.quiz;
+            console.log(this.answer);
             this.$axios.post('/answers/add', this.answer).then((data) => {
                 if (data.status) {
-                    this.$message({
+/*                     this.$message({
+                    showClose: true,                        
                         type: 'success',
                         message: 'Cevabınızı kayıt edilmiştir.'
-                    });
+                    }); */
                 }
             });
         }
@@ -118,62 +116,46 @@ export default {
         justify-content: center;
     }
 
-    #loader {
-    animation: loader 5s cubic-bezier(.8,0,.2,1) infinite;
-    height: 40px;
-    width: 41px;
-    position: absolute;
-    top:calc(50% - 50px);
-    left:calc(50% - 20px);
+.nb-spinner {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    background: transparent;
+    border-top: 4px solid #03A9F4;
+    border-right: 4px solid transparent;
+    border-radius: 50%;
+    -webkit-animation: 1s spin linear infinite;
+    animation: 1s spin linear infinite;
+}
+    
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
     }
-    @keyframes loader {
-    90% { transform: rotate(0deg); }
-    100% { transform: rotate(180deg); }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-    #top {
-    animation: top 5s linear infinite;
-    border-top: 20px solid #EBEEF5;
-    border-right: 20px solid transparent;
-    border-left: 20px solid transparent;
-    height: 0px;
-    width: 1px;
-    transform-origin: 50% 100%;
+}
+          
+@keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
     }
-    @keyframes top {
-    90% { transform: scale(0); }
-    100% { transform: scale(0);}
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-    #bottom {
-    animation: bottom 5s linear infinite;
-    border-right: 20px solid transparent;
-    border-bottom: 20px solid #EBEEF5;
-    border-left: 20px solid transparent;
-    height: 0px;
-    width: 1px;
-    transform: scale(0);
-    transform-origin: 50% 100%;
-    }
-    @keyframes bottom {
-    10% { transform: scale(0); }
-    90% { transform: scale(1); }
-    100% { transform: scale(1); }
-    }
-    #line {
-    animation: line 5s linear infinite;
-    border-left: 1px dotted #EBEEF5;
-    height: 0px;
-    width: 0px;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    }
-    @keyframes line {
-    10% { height: 20px; }
-    100% { height: 20px; }
-    }
+}
+
     .please-wait {
         position: relative;
         display: block;
+        margin-top: 10px;
         text-align: center;
     }
 </style>

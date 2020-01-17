@@ -8,7 +8,7 @@
     ref="form"
     @submit.native.prevent="sendForm"
     >
-      <el-form-item label="Name" prop="name">
+      <el-form-item label="Name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="Aktif mi?">

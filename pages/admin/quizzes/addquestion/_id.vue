@@ -179,6 +179,8 @@ export default {
     list-style: none;
     padding-left: 0px;
     cursor: move;
+    height: 430px;  
+    overflow-y: auto;  
 }
 
 .item-select li {

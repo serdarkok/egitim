@@ -1,4 +1,4 @@
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const env = require('dotenv').config();
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
@@ -90,7 +90,7 @@ module.exports = {
 
   serverMiddleware: [
     // { path: '/api', handler: '~/api/auth.js' },
-    bodyParser.json(),
+    // bodyParser.json(),
     "~/api/db.js",
     "~/api/auth.js",
     "~/api/user.js",

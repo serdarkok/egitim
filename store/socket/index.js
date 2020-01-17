@@ -18,7 +18,10 @@ const actions = {
                 break;
             
             case 'a_start':
-                const result = await this.$axios.get('/answer/'+data.id);
+                const result = await this.$axios.get('/answers/'+data.id);
+                
+                console.log(result);
+                
                 if (result) {
                     commit('REMOVE_QUESTION');
                     commit('SET_ANSWER', result);

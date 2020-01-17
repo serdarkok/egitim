@@ -16,7 +16,7 @@ app.post('/answers/add', async (req, res) => {
             });
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 });
 
@@ -24,7 +24,7 @@ function countAnswer (array, data) {
     return array.filter(x => x == data).length
 }
 
-app.get('/answer/:id', async (req, res) => {
+app.get('/answers/:id', async (req, res) => {
     const question_id = req.params.id;
     const _ = await Answer.find({question_id});
     // console.log(_);
@@ -51,10 +51,23 @@ app.get('/answer/:id', async (req, res) => {
             element.total = countAnswer(Obj, element.dummy_id);
         });
 
+        const totalAnswer = question.choices.reduce((a, b) => {
+            return a + b.total;
+        },0);
+
+/*         question.choices.forEach(element => {
+            console.log(element.total);
+            totalAnswer = totalAnswer + element.total;
+        }); */
+
+        console.log(totalAnswer);
+
         const _result = {
             question: question,
-            guest: 100 / Obj.length
+            guest: 100 / Obj.length,
+            totalAnswer: totalAnswer
         }
+        
         res.send(_result);
 
     });

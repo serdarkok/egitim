@@ -1,14 +1,14 @@
 <template>
-        <el-card :body-style="{ padding: '0px' }" shadow="hover">
+        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="result-wrapper">
             <div slot="header" class="questionText">
                 {{ result.data.question.name }}
             </div>
             <!-- card body -->
-
             <div style="padding: 5px;">
-                <ul class="item-select">
+                  <ul class="item-select">
                     <li v-for="(item, index) in result.data.question.choices" :key="index">
-                        <div class="bar" :style="{width: calculatePercent(item.total)}" :class="{ correct: item.correct, answer: checkAnswer(item.dummy_id, userAnswer) }" >
+                      <div class="options"> {{ getOptions[index] }} </div>
+                        <div class="bar" :style="{width: calculate(item.total)}" :class="{ correct: item.correct, answer: checkAnswer(item.dummy_id, userAnswer) }" >
                             <div>{{ calculate(item.total) }}</div>
                         </div>
                         <div class="choiceText" :class="{ correctText: item.correct }">
@@ -28,26 +28,27 @@ export default {
             required: true,
         },
         userAnswer: {
-            type: Number
+            type: String
         }
     },
 
     data() {
         return {
-            guest: this.result.data.guest
+            guest: this.result.data.guest,
+            getSeries : null,
+            series: [{
+                data: [],
+                categories: [],
+            }],
+            getOptions: [],
+            options : ['A)', 'B)', 'C)', 'D)', 'E)'],
         }
     },
 
     methods : {
-        calculatePercent (data) {
-            console.log(this.guest);
-            var result = (data * this.guest);
-            (result<1)?result=1:'';
-            return result + '%';
-        },
-        calculate (data) {
-            console.log(this.guest);
-            var result = (data * this.guest);
+        calculate(total) {
+            console.log(this.result.data.total);
+            var result = ((total * 100) / this.result.data.totalAnswer);
             return result.toPrecision(2) + '%';
         },
         checkAnswer(a,b) {
@@ -56,6 +57,13 @@ export default {
             }
                 return false;
         }
+    },
+
+    mounted() {
+      // console.log(this.result.data.question.choices);
+       this.result.data.question.choices.forEach((element, index) => {
+        this.getOptions.push(this.options[index]);
+      });
     }
 };
 </script>
@@ -72,73 +80,50 @@ export default {
     padding: 5px;
     border-bottom: 1px solid #EBEEF5;
     font-size: 10px;
-}
-
-.choiceText {
-    padding: 3px;
-    max-width: 94%;
-    font-weight: 700;
-    border: 1px solid #DFDFDF;
-    background: rgba(255,255,255,1);
-    background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));
-    background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-    background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-    background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );
-}
-
-.bar {
-    height: 35px;
-    width: 0px;
-    max-width: 94% !important;
-    background: rgba(150,150,150,1);
-    background: -moz-linear-gradient(top, rgba(150,150,150,1) 0%, rgba(56,56,56,1) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(150,150,150,1)), color-stop(100%, rgba(56,56,56,1)));
-    background: -webkit-linear-gradient(top, rgba(150,150,150,1) 0%, rgba(56,56,56,1) 100%);
-    background: -o-linear-gradient(top, rgba(150,150,150,1) 0%, rgba(56,56,56,1) 100%);
-    background: -ms-linear-gradient(top, rgba(150,150,150,1) 0%, rgba(56,56,56,1) 100%);
-    background: linear-gradient(to bottom, rgba(150,150,150,1) 0%, rgba(56,56,56,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#969696', endColorstr='#383838', GradientType=0 );
-    animation: acrossIn .30s ease-out both;
-}
-
-.bar div {
-    position: absolute;
-    right: -40px;
-    top: 10px;
+    position: relative;
+    padding-left: 20px;
 }
 
 .questionText {
-    font-weight: 700;
-    font-size: 12px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.options {
+  position: absolute;
+  left: 0px;
+  font-size: 15px;
+  font-weight: 700;
+  top: 7px;
 }
 
 .correct {
-    background: rgba(164,179,87,1) !important;
-    background: -moz-linear-gradient(top, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%) !important;
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(164,179,87,1)), color-stop(100%, rgba(117,137,12,1))) !important;
-    background: -webkit-linear-gradient(top, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%) !important;
-    background: -o-linear-gradient(top, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%) !important;
-    background: -ms-linear-gradient(top, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%);
-    background: linear-gradient(to bottom, rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%) !important;
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c', GradientType=0 );
+  background-color: rgb(8, 150, 32) !important;
 }
 
 .answer {
-    background: rgba(255,94,94,1);
-    background: -moz-linear-gradient(top, rgba(255,94,94,1) 0%, rgba(237,3,3,1) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,94,94,1)), color-stop(100%, rgba(237,3,3,1)));
-    background: -webkit-linear-gradient(top, rgba(255,94,94,1) 0%, rgba(237,3,3,1) 100%);
-    background: -o-linear-gradient(top, rgba(255,94,94,1) 0%, rgba(237,3,3,1) 100%);
-    background: -ms-linear-gradient(top, rgba(255,94,94,1) 0%, rgba(237,3,3,1) 100%);
-    background: linear-gradient(to bottom, rgba(255,94,94,1) 0%, rgba(237,3,3,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff5e5e', endColorstr='#ed0303', GradientType=0 );
+  background-color: rgb(150, 8, 67) !important;
+}
+
+.bar {
+  background-color: rgb(8, 86, 150);
+  padding: 15px;
+  padding-left: 5px;
+  color: #FFFFFF;
+  font-weight: 700;
+  position: relative;
+  animation: acrossIn .30s ease-out both;
 }
 
 .correctText {
     color: rgb(119, 138, 15);
+}
+
+.bar div {
+  position: absolute;
+  right: -25px;
+  top: 7px;
+  color: #333333;
 }
 
 @keyframes acrossIn {
