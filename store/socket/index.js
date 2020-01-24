@@ -39,8 +39,8 @@ const actions = {
         }
     },
 
-    addGuestCount({commit}) {
-        commit('ADD_GUEST');
+    async SOCKET_addGuestCount({commit}, data) {
+        commit('ADD_GUEST', data);
     }
 }
 
@@ -61,8 +61,8 @@ const mutations = {
         state.result = null;
     },
 
-    ADD_GUEST(state) {
-        state.userCount = state.userCount + 1;
+    ADD_GUEST(state, data) {
+        state.userCount = data;
     }
  }
 

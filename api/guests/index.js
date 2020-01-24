@@ -44,6 +44,19 @@ app.post('/guest/remove', async (req, res) => {
 
 });
 
+app.get('/guests/guestCount', async (req, res) => {
+
+        try {
+            const _result = await Guests.find({status: true});
+            console.log(_result.length);
+            res.json(_result.length);
+        } catch (error) {
+            console.log(error)
+        }
+
+
+});
+
 
 
 module.exports = {

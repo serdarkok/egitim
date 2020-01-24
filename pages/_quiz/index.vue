@@ -2,12 +2,13 @@
     <el-row>
         <el-col :sm="{span: 20, offset: 2}" :md="{span: 12, offset: 6}"  :lg="{span: 12, offset: 6}" :xs="{span: 22, offset: 1}" >
             <div class="question-wrap" v-loading="loading">
-            <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
-            <Result v-else-if="a" :result="a" :userAnswer="answer.radio"></Result>
-            <div class="wait-wrap" v-else>
-                <div class="nb-spinner"></div>
-                    <div class="please-wait" v-html="waitText"></div>
+                <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
+                <Result v-else-if="a" :result="a" :userAnswer="answer.radio"></Result>
+                <div class="wait-wrap" v-else>
+                    <div class="nb-spinner"></div>
+                        <div class="please-wait" v-html="waitText"></div>
                 </div>
+                {{ guestCount }}
             </div>
         </el-col>
     </el-row>
@@ -35,6 +36,7 @@ export default {
                 question_id: null,
                 quiz_slug: this.$route.params.quiz,
             },
+            guestCount: 0,
         }
     },
 
@@ -42,7 +44,6 @@ export default {
         connect: function () {
             console.log(this.$socket.id);
             this.$socket.emit('joinRoom', this.$route.params.quiz);
-            this.$store.dispatch('socket/addGuestCount');
         },
         disconnect: function () {
             console.log('BAGLANTI DUSTU');
@@ -63,7 +64,11 @@ export default {
         // this.questions = this.$store.getters['socket/allQuestion'];
     },
 
-    computed: mapState('socket', ['question', 'result']),
+    computed: {
+        
+        ...mapState('socket', ['question', 'result', 'userCount']),
+
+    },
 
     watch: {
         question(data) {
@@ -90,7 +95,19 @@ export default {
             this.waitText = `oturumunuz sonlanmış <br/> <a href="./login" type="warning">lütfen tekrar giriş yapınız</a>`;
             this.a = null;
           }
+        },
+
+        userCount(newData, oldData) {
+            console.log('oldData', oldData);
+            console.log('newData', newData);
+            this.guestCount = newData;
         }
+
+    },
+
+    mounted() {
+        this.guestCount = this.userCount;
+        console.log(this.userCount);
     },
 
     methods: {
