@@ -1,12 +1,12 @@
 import Express from 'express';
-import Guest from '../../models/Guests';
+import Guests from '../../models/Guests';
 const app = new Express();
 
 
 app.post('/guests/add', async (req, res) => {
     console.log(req.body);
     try {
-        const _ = new Guest(req.body);
+        const _ = new Guests(req.body);
         await _.save((err, data) => {
             if (err) {
                 res.status(400).send({
@@ -26,6 +26,22 @@ app.post('/guests/add', async (req, res) => {
             message: err
         });        
     }
+});
+
+app.post('/guest/remove', async (req, res) => {
+    console.log(req.body);
+
+    try {
+        const _result = await Guests.deleteOne({_id : req.body});
+
+        if (_result) {
+            res.status(200).send('Ok');
+        } 
+
+    } catch (error) {
+        console.log(error);
+    }
+
 });
 
 

@@ -5,9 +5,9 @@
             <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
             <Result v-else-if="a" :result="a" :userAnswer="answer.radio"></Result>
             <div class="wait-wrap" v-else>
-            <div class="nb-spinner"></div>
-                <div class="please-wait" v-html="waitText"></div>
-            </div>
+                <div class="nb-spinner"></div>
+                    <div class="please-wait" v-html="waitText"></div>
+                </div>
             </div>
         </el-col>
     </el-row>
@@ -41,6 +41,15 @@ export default {
     sockets: {
         connect: function () {
             console.log(this.$socket.id);
+            this.$socket.emit('joinRoom', this.$route.params.quiz);
+            this.$store.dispatch('socket/addGuestCount');
+        },
+        disconnect: function () {
+            console.log('BAGLANTI DUSTU');
+        },
+        reconnect: function () {
+            this.$socket.emit('joinRoom', this.$route.params.quiz);
+            console.log('TEKRAR RECONNECT OLDU...');
         }
     },
 
@@ -101,7 +110,7 @@ export default {
                 }
             });
         }
-    }
+    },
 }
 </script>
 

@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+// import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -12,10 +14,22 @@ const guestsSchema = new Schema({
             type: String
         },
 
+        status : {
+            type: Boolean,
+            default: true
+        },
+
         createdAt: {
             type: Date,
             default: Date.now
         },
+
+        updatedAt: {
+            type: Date,
+            default: Date.now
+        }
 });
 
-export default mongoose.model('Guest', guestsSchema);
+// export default mongoose.model('Guest', guestsSchema);
+
+module.exports = mongoose.model('Guest', guestsSchema);

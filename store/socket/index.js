@@ -1,6 +1,7 @@
 const state = () => ({
     question: '',
     result: '',
+    userCount: 0,
 });
 
 const actions = {
@@ -8,6 +9,9 @@ const actions = {
         switch(data.action) {
             case 'q_start':
                 const _ = await this.$axios.get('/questions/'+data.id);
+                // Burada quiz süresini objeye ekliyoruz. Eğer soruda süre yoksa quiz içerisindeki süreyi dikkate alacak.
+                const quizTime = await this.$axios.get('/quizzes/getQuizBySlug/'+data.quiz_id);
+                _.data.data.quizTime = quizTime.data.data.time;
                 if (_) {
                     commit('SET_QUESTION', _.data.data);
                 }
@@ -33,6 +37,10 @@ const actions = {
                     commit('REMOVE_ANSWER');
                 break;                
         }
+    },
+
+    addGuestCount({commit}) {
+        commit('ADD_GUEST');
     }
 }
 
@@ -51,6 +59,10 @@ const mutations = {
 
     REMOVE_ANSWER(state, date) {
         state.result = null;
+    },
+
+    ADD_GUEST(state) {
+        state.userCount = state.userCount + 1;
     }
  }
 

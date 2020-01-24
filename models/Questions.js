@@ -16,6 +16,10 @@ const questionsSchema = new Schema({
         type: Boolean,
     },
 
+    time : {
+        type: Number,
+    },
+
     photo: {
         type: String
     },

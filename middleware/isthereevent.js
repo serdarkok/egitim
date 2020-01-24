@@ -7,7 +7,7 @@ const isThereEvent = async function(context) {
         if (_.data.status == false) {
             process.server? context.redirect('/404'): context.$router.push('/404');
         } else if(_.data.status == true) {
-            context.app.$cookies.set('time', _.data.data.time);
+            // context.app.$cookies.set('time', _.data.data.time);
         }
     } catch (error) {
         console.log(error);

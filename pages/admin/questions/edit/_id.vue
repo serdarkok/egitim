@@ -36,6 +36,9 @@
           v-model="form.name"
         ></el-input>
       </el-form-item>
+      <el-form-item label="Süresi" prop="time">
+          <el-input-number v-model="form.time" :min="0" :max="100" size="small" :step="5"></el-input-number>
+      </el-form-item>             
       <Choice :choices="form.choices" @addChoice="addChoice" @removeChoice="removeChoice" @selectRadio="selectRadio"></Choice>
       <el-form-item label="Kategori">
         <el-select v-model="form.c_id._id" placeholder="Seçiniz">

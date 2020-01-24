@@ -6,7 +6,7 @@
                 <span class="selected-option" v-if="selected">Seçtiğin Cevap: {{ options[selected - 1] }}</span>
             </el-col>
             <el-col :span="3">
-                <countdown :count="count"></countdown>
+                <countdown :count="q.time || q.quizTime"></countdown>
             </el-col>
         </el-row>
     </div>
@@ -34,6 +34,17 @@
             </label>
         </table> -->
     </div>
+
+    <el-dialog
+    title="Bilgi"
+    :visible.sync="dialogVisible"
+    width="90%"
+    :before-close="handleClose">
+    <span>Cevabını kaydettik, süre bitene kadar cevabını <br/> değiştirebilirsin</span>
+    <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false" type="warning" plain size="small">Tamam</el-button>
+    </span>
+    </el-dialog>    
 </el-card>
 </template>
 
@@ -56,6 +67,7 @@ export default {
             count: this.$cookies.get('time'),
             options: ['A', 'B', 'C', 'D', 'E'],
             selected: null,
+            dialogVisible: false,
         }
     },
 
@@ -80,12 +92,17 @@ export default {
                 radio: radio
             }
             this.$emit('getRadio', total);
+            this.dialogVisible = true;
             // this.$emit('addChoice', {data: i});
         },
 
         getPhoto(photo) {
             return '/uploads/' + photo;
         }
+    }, 
+
+    mounted() {
+        this.selected = null;
     }
 }
 </script>

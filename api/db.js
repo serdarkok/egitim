@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose';
 
-        Mongoose.connect('mongodb://'+process.env.BASE_URL+':27017/egitim', {useNewUrlParser: true});
+        Mongoose.connect('mongodb://'+process.env.SERVER+':27017/egitim', {useNewUrlParser: true});
 
         Mongoose.set('useFindAndModify', true);
 

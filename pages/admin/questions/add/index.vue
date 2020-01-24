@@ -34,6 +34,9 @@
           v-model="form.name"
         ></el-input>
       </el-form-item>
+      <el-form-item label="Süresi" prop="time">
+          <el-input-number v-model="form.time" :min="0" :max="100" size="small" :step="5"></el-input-number>
+      </el-form-item>       
       <Choice :choices="form.choices" @addChoice="addChoice" @removeChoice="removeChoice" @selectRadio="selectRadio"></Choice>
       <el-form-item label="Kategori" prop="c_id">
         <el-select v-model="form.c_id" placeholder="Seçiniz">
@@ -75,6 +78,7 @@ export default {
         photo: '',
         name: '',
         c_id: '',
+        time: '',
         choices: [
           {dummy_id: '1', name: null, correct: false},
           {dummy_id: '2', name: null, correct: false},

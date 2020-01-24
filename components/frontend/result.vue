@@ -47,9 +47,16 @@ export default {
 
     methods : {
         calculate(total) {
-            console.log(this.result.data.total);
+            console.log(this.result.data.totalAnswer);
+            if(this.result.data.totalAnswer > 0) {
             var result = ((total * 100) / this.result.data.totalAnswer);
-            return result.toPrecision(2) + '%';
+            console.log(result);
+            return Math.round(result) + '%';
+            } else {
+              return 0;
+            }
+
+            // return result.toPrecision(3) + '%';
         },
         checkAnswer(a,b) {
             if (a == b) {
@@ -73,6 +80,7 @@ export default {
 .item-select {
     list-style: none;
     padding-left: 0px;
+    padding-right: 20px;
     cursor: move;
 }
 
