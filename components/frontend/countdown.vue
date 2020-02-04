@@ -12,6 +12,7 @@ export default {
         return {
             value: null,
             ss: 0,
+            timer: ''
         }
     },
 
@@ -23,15 +24,22 @@ export default {
 
     mounted() {
         this.value = this.count;
-        const _count = setInterval(() => {
+        this.timer = setInterval(() => {
             this.value = --this.value;
             this.ss = (((this.value) * 100) / this.count);
+            console.log(this.ss);
             if (this.value <= 0) {
                 console.log('şuan küçük');
-                clearInterval(_count);
+                clearInterval(this.timer);
+                this.$emit('stopAnswer', true);
             }
         }, 1000);
+    },
+
+    beforeDestroy() {
+        clearInterval(this.timer);
     }
+
 }
 </script>
 

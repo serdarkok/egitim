@@ -1,6 +1,9 @@
 <template>
     <el-row>
         <el-col :sm="{span: 20, offset: 2}" :md="{span: 12, offset: 6}"  :lg="{span: 12, offset: 6}" :xs="{span: 22, offset: 1}" >
+            <div class="guest-count-wrapper">
+                <i class="el-icon-user"></i> {{ guestCount }}
+            </div>            
             <div class="question-wrap" v-loading="loading">
                 <Question :q="this.q" v-if="q" @getRadio="getRadio"></Question>
                 <Result v-else-if="a" :result="a" :userAnswer="answer.radio"></Result>
@@ -8,7 +11,6 @@
                     <div class="nb-spinner"></div>
                         <div class="please-wait" v-html="waitText"></div>
                 </div>
-                {{ guestCount }}
             </div>
         </el-col>
     </el-row>
@@ -106,8 +108,14 @@ export default {
     },
 
     mounted() {
-        this.guestCount = this.userCount;
-        console.log(this.userCount);
+        // Event içerisindeki mevcut kullanıcı sayısını çekmektedir.
+        const _data = {
+            event: this.$route.params.quiz,
+            status: true
+        }
+        this.$axios.post('/guests/guestCount', _data).then((result) => {
+            this.guestCount = result.data;
+        });
     },
 
     methods: {
@@ -136,25 +144,47 @@ export default {
         min-height: 300px;
         background-color: #FFFFFF;
         border-radius: 12px;
-        margin-top: 20px;
+        margin-top: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-.nb-spinner {
+    .nb-spinner {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        width: 60px;
+        height: 60px;
+        background: transparent;
+        border-top: 4px solid #03A9F4;
+        border-right: 4px solid transparent;
+        border-radius: 50%;
+        -webkit-animation: 1s spin linear infinite;
+        animation: 1s spin linear infinite;
+        }
+
+    .guest-count-wrapper {
+    background: #3f4c6b; /* Old browsers */
+    background: -moz-linear-gradient(top,  #3f4c6b 0%, #3f4c6b 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #3f4c6b 0%,#3f4c6b 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #3f4c6b 0%,#3f4c6b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3f4c6b', endColorstr='#3f4c6b',GradientType=0 ); /* IE6-9 */
+    position: absolute;
+    top: 0;
+    color: #FFFFFF;
+    font-weight: 700;
+    width: 100px;
+    text-align: center;
+    margin-top: 10px;
+    z-index: -1;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
-    width: 60px;
-    height: 60px;
-    background: transparent;
-    border-top: 4px solid #03A9F4;
-    border-right: 4px solid transparent;
-    border-radius: 50%;
-    -webkit-animation: 1s spin linear infinite;
-    animation: 1s spin linear infinite;
-}
+    left: 0;
+    right: 0;
+    }
     
 @-webkit-keyframes spin {
     from {

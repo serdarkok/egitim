@@ -31,8 +31,8 @@ const createStore = () => {
                     }
                 }
                 // await dispatch('auth/verifyToken', user); */
-                console.log(req.header.url);
-                console.log('Original URL: ' + req);
+                // console.log(req.header.url);
+                // console.log('Original URL: ' + req);
 
                 // axios.get('')
             } 

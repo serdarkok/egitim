@@ -28,7 +28,7 @@ io.on('connection', async socket => {
         //Cookie var ise cookie içerisinde user_id var mı yok mu?
         if (_cookie.user_id) {
             await Guests.updateOne({_id: _cookie.user_id}, {status: true, socket_id: socket.id, updatedAt: Date.now()}).then(function(event) {
-                console.log(event);
+                // console.log(event);
             });
         }
     }
@@ -41,13 +41,8 @@ io.on('connection', async socket => {
     socket.on('joinRoom', async (data) => {
         socket.join(data);
         socket.currentRoom = data;
-        console.log('Odaya bağlı kullanıcı sayısı: ' + socket.adapter.rooms[data].length);
-        console.log(`odaya giriş yapıldı: ${data}`);
 
         await Guests.find({status: true}).then(function(result) {
-            console.log(result.length);
-            console.log(data);
-            console.log('Kullanıcı sayısı emit ediliyor...');
             socket.to(data).emit('addGuestCount', result.length);
         });
         
@@ -56,14 +51,10 @@ io.on('connection', async socket => {
     });
 
     socket.on('disconnect', () => {
-        console.log('disconnect oldu: ', + socket.id);
-
         // Disconnect olan kullanıcının kullanıcının status durumunu değiştiriyoruz. 
         // Bağlantısını kesen kullanıcının socket.id'sini alıp Guests üzerinden status'unu false yapıyoruz. Kullanıcı çıkış yapmış görünecek.
         Guests.updateOne({socket_id: socket.id}, {status: false, updatedAt: Date.now()}).then(function(event) {
             Guests.find({status: true}).then(function(result) {
-                console.log(result.length);
-                console.log('Kullanıcı sayısı emit ediliyor...');
                 socket.to(socket.currentRoom).emit('addGuestCount', result.length);
             });
         });

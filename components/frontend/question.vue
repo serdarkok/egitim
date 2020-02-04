@@ -1,12 +1,12 @@
 <template>
-<el-card :body-style="{ padding: '0px' }" shadow="hover" class="result-wrapper">
+<el-card :body-style="{ padding: '0px', height: '100%' }" shadow="hover" class="result-wrapper">
     <div slot="header">
         <el-row type="flex" justify="space-between" align="middle">
             <el-col :span="21">
                 <span class="selected-option" v-if="selected">Seçtiğin Cevap: {{ options[selected - 1] }}</span>
             </el-col>
             <el-col :span="3">
-                <countdown :count="q.time || q.quizTime"></countdown>
+                <countdown :count="q.time || q.quizTime" @stopAnswer="stopAnswerEmit"></countdown>
             </el-col>
         </el-row>
     </div>
@@ -36,13 +36,28 @@
     </div>
 
     <el-dialog
-    title="Bilgi"
     :visible.sync="dialogVisible"
     width="90%"
-    :before-close="handleClose">
+    >
+    <span slot="title" class="dialof-header">
+        <img src="~/assets/images/happy.png" style="max-width: 30px;" />
+    </span>
     <span>Cevabını kaydettik, süre bitene kadar cevabını <br/> değiştirebilirsin</span>
     <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false" type="warning" plain size="small">Tamam</el-button>
+    </span>
+    </el-dialog>
+
+    <el-dialog
+    :visible.sync="showStopAnswer"
+    width="90%"
+    >
+    <span slot="title" class="dialof-header">
+        <img src="~/assets/images/sad.png" style="max-width: 30px;" />
+    </span>    
+    <span>Üzgünüz, bu soru için gereken süre tamamlandı.</span>
+    <span slot="footer" class="dialog-footer">
+        <el-button @click="showStopAnswer = false" type="warning" plain size="small">Tamam</el-button>
     </span>
     </el-dialog>    
 </el-card>
@@ -68,6 +83,8 @@ export default {
             options: ['A', 'B', 'C', 'D', 'E'],
             selected: null,
             dialogVisible: false,
+            stopAnswer: false,
+            showStopAnswer: false,
         }
     },
 
@@ -84,6 +101,9 @@ export default {
         },
 
         sendRadio(radio) {
+            if(this.stopAnswer) {
+                this.showStopAnswer = true;
+            } else {
             console.log(this.question_id);
             console.log(radio);
             this.selected = radio;
@@ -94,10 +114,15 @@ export default {
             this.$emit('getRadio', total);
             this.dialogVisible = true;
             // this.$emit('addChoice', {data: i});
+            }
         },
 
         getPhoto(photo) {
             return '/uploads/' + photo;
+        },
+
+        stopAnswerEmit(data) {
+            this.stopAnswer = data;
         }
     }, 
 
@@ -142,7 +167,12 @@ export default {
     padding: 10px 2px;
     padding-left: 20px;
     position: relative;
+    font-weight: 600;
     cursor: pointer;
+    display: flex;
+    display: -ms-flexbox;
+    align-items: center;
+    min-height: 50px;
 }
 
 .choice-name {

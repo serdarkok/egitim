@@ -43,7 +43,7 @@ if (process.browser) {
 
 export default {
   layout: "login",
-  middleware: 'alreadyLogin',
+  // middleware: 'alreadyLogin',
   components: {QrCode},
   name: "login",
   data() {
@@ -52,6 +52,7 @@ export default {
       model : {
         name: null,
         socket_id: null,
+        event: this.$route.params.quiz,
       },
       loading: false,
       rules: {

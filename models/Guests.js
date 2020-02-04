@@ -19,6 +19,10 @@ const guestsSchema = new Schema({
             default: true
         },
 
+        event: {
+            type: String
+        },
+
         createdAt: {
             type: Date,
             default: Date.now
@@ -32,4 +36,4 @@ const guestsSchema = new Schema({
 
 // export default mongoose.model('Guest', guestsSchema);
 
-module.exports = mongoose.model('Guest', guestsSchema);
+module.exports = mongoose.model('Guests', guestsSchema);

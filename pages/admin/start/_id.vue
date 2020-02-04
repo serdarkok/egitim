@@ -7,10 +7,10 @@
             <el-table-column fixed prop="name" label="Soru"></el-table-column>
             <el-table-column fixed="right" label="Ayarlar" width="260">
               <template slot-scope="scope">
-                <el-button type="danger" v-if="showTime == scope.row._id" @click="setQuestion(scope.row._id, 'q_stop')" size="mini" plain >Yayında {{cloneTime}}</el-button>
-                <el-button type="success" v-else :disabled="snozeTime" @click="setQuestion(scope.row._id, 'q_start')" size="mini" plain >Yayınla</el-button>
-                <el-button type="warning" size="mini" v-if="showAnswer == scope.row._id" @click="setQuestion(scope.row._id, 'a_stop')" plain>Cevabı Gizle</el-button>
-                <el-button type="warning" size="mini" v-else @click="setQuestion(scope.row._id, 'a_start')" plain>Cevabı Göster</el-button>
+                <el-button type="danger" v-if="showTime == scope.row._id" @click="setQuestion(scope.row, 'q_stop')" size="mini" plain >Yayında {{cloneTime}}</el-button>
+                <el-button type="success" v-else :disabled="snozeTime" @click="setQuestion(scope.row, 'q_start')" size="mini" plain >Yayınla</el-button>
+                <el-button type="warning" size="mini" v-if="showAnswer == scope.row._id" @click="setQuestion(scope.row, 'a_stop')" plain>Cevabı Gizle</el-button>
+                <el-button type="warning" size="mini" v-else @click="setQuestion(scope.row, 'a_start')" plain>Cevabı Göster</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -51,13 +51,14 @@ export default {
         switch (action) {
             case 'q_start':
                 this.sendID(data, action);
-                this.cloneTime = this.data.time;
-                this.showTime = data;
+                this.cloneTime = data.time || this.data.time;
+                this.showTime = data._id;
+                this.showAnswer = false;
                 this.snozeTime = true;
                 hello = setInterval(() => {
                 this.cloneTime--;
                 if (this.cloneTime == 0) {
-                    this.time = this.data.time;
+                    this.time = data.time || this.data.time;
                     this.snozeTime = false;
                     clearInterval(hello);
                 }
@@ -67,15 +68,16 @@ export default {
             case 'q_stop':
                 clearInterval(hello);
                 this.showTime = false;
-                this.time = this.data.time;
+                this.time = data.time || this.data.time;
                 this.snozeTime = false;
                 this.sendID(data, action);
                 break;
 
             case 'a_start':
                 clearInterval(hello);
-                this.showTime = false;                
-                this.showAnswer = data;
+                this.showTime = false;
+                this.snozeTime = false;
+                this.showAnswer = data._id;
                 this.sendID(data, action);
                 break;
 
@@ -83,7 +85,7 @@ export default {
                 clearInterval(hello);
                 this.showTime = false;
                 this.showAnswer = false;
-                this.time = this.data.time;
+                this.time = data.time || this.data.time;
                 this.snozeTime = false;
                 this.sendID(data, action);
                 break;
@@ -93,8 +95,8 @@ export default {
         }
     },
 
-    sendID(id, action) {
-      this.$socket.emit("newQuestion", { id: id, quiz_id: this.quiz_id, action: action });
+    sendID(data, action) {
+      this.$socket.emit("newQuestion", { id: data._id, quiz_id: this.quiz_id, action: action });
     }
   }
 };

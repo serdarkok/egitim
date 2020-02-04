@@ -44,16 +44,22 @@ app.post('/guest/remove', async (req, res) => {
 
 });
 
-app.get('/guests/guestCount', async (req, res) => {
-
+app.post('/guests/guestCount', async (req, res) => {
         try {
-            const _result = await Guests.find({status: true});
-            console.log(_result.length);
+            const _result = await Guests.find(req.body);
             res.json(_result.length);
         } catch (error) {
             console.log(error)
         }
+});
 
+app.post('/guests/guestControl', async (req, res) => {
+    try {
+        const _result = await Guests.findById(req.body);
+        res.json(_result);
+    } catch (error) {
+        console.log(error);
+    }
 
 });
 

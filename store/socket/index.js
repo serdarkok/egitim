@@ -6,6 +6,7 @@ const state = () => ({
 
 const actions = {
     async SOCKET_sendQuestion ({ commit }, data) {
+        console.log(data);
         switch(data.action) {
             case 'q_start':
                 const _ = await this.$axios.get('/questions/'+data.id);
@@ -23,9 +24,6 @@ const actions = {
             
             case 'a_start':
                 const result = await this.$axios.get('/answers/'+data.id);
-                
-                console.log(result);
-                
                 if (result) {
                     commit('REMOVE_QUESTION');
                     commit('SET_ANSWER', result);
