@@ -2,6 +2,10 @@
 
 > This app created by Nuxt.js. 
 
+That project like little bit a quiz, or election or poll. Lets suppose that you join a summit. There are about 100 people at summit. Moderator or speaker can want to ask any question to them and he wants to look at avarage of sum. How does he doing that? How can they answer questions what moderator asked?
+
+Participants join a website by write some own information (name, surname). Moderators can send any questions to all participants's phone at what ever want. Participants can answer it what moderator asked. And than, moderator can see result of question. This system can use at council, parliament and any summit. 
+
 I used:
 
 websocket
